@@ -9,9 +9,9 @@
 	};
 	export let prices: readonly [Price, Price, Price];
 </script>
-
+<!-- //todo fixed pricing -->
 <Pricing.Root>
-	<Pricing.Plan>
+	<Pricing.Plan emphasized>
 		<Card.Root class="relative">
 			<div class="absolute right-5 top-1.5">
 				<Price.Badges price={prices[0]} />
@@ -39,7 +39,7 @@
 			</Card.Footer>
 		</Card.Root>
 	</Pricing.Plan>
-	<Pricing.Plan emphasized>
+	<!-- <Pricing.Plan emphasized>
 		<Card.Root class="relative">
 			<div class="absolute right-2 top-1.5">
 				<Price.Badges price={prices[1]} />
@@ -52,7 +52,7 @@
 			</Card.Header>
 			<Price.Core price={prices[1]}>
 				<Card.Content class="flex flex-col gap-6">
-					<!-- <span class="text-5xl font-black tracking-tight">$0</span> -->
+					<span class="text-5xl font-black tracking-tight">$0</span>
 					<Price.Amount price={prices[1]} />
 					<Price.Button price={prices[1]}>Get Started</Price.Button>
 				</Card.Content>
@@ -67,7 +67,7 @@
 			</Card.Footer>
 		</Card.Root>
 	</Pricing.Plan>
-	<Pricing.Plan>
+<Pricing.Plan>
 		<Card.Root class="relative">
 			<div class="absolute right-2 top-1.5">
 				<Price.Badges price={prices[2]} />
@@ -80,7 +80,7 @@
 			</Card.Header>
 			<Price.Core price={prices[2]}>
 				<Card.Content class="flex flex-col gap-6">
-					<!-- <span class="text-5xl font-black tracking-tight">$0</span> -->
+					<span class="text-5xl font-black tracking-tight">$0</span> 
 					<Price.Amount price={prices[2]} />
 					<Price.Button price={prices[2]}>Get Started</Price.Button>
 				</Card.Content>
@@ -95,5 +95,5 @@
 				</Pricing.PlanFeatures>
 			</Card.Footer>
 		</Card.Root>
-	</Pricing.Plan>
+	</Pricing.Plan>-->
 </Pricing.Root>

@@ -19,11 +19,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 	// }
 
 	// get profile info
+
+	//todo table name 
 	let info;
 	if (user) {
 		const { data, error } = await locals.supabase
 			.from('profiles')
-			.select('name')
+			.select('full_name')
 			.eq('id', user.id)
 			.single();
 		if (error) {
