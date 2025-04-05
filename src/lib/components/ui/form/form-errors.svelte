@@ -8,9 +8,9 @@
 		[key: string]: any
 	}
 
-	let { ...props }: Props = $props();
+	let { form, ...props }: Props = $props();
 
-	let { errors } = props.$derived(form);
+	let { errors } = form;
 </script>
 
 {#if $errors?._errors && $errors._errors.length > 0}
