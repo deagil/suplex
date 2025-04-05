@@ -5,7 +5,7 @@
 	import { fly } from 'svelte/transition';
 	import LucideCookie from '~icons/lucide/cookie';
 
-	let show = false;
+	let show = $state(false);
 
 	let isEurope = false;
 	try {

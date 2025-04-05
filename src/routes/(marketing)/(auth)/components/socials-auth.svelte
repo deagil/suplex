@@ -25,7 +25,7 @@
 		}
 	}
 
-	$: redirectTo = `redirectTo=${encodeURIComponent(`${$page.url.origin}/auth/callback?${$page.url.search}`)}`;
+	let redirectTo = $derived(`redirectTo=${encodeURIComponent(`${$page.url.origin}/auth/callback?${$page.url.search}`)}`);
 </script>
 
 {#if oAuthProviders.length > 0}
@@ -39,39 +39,41 @@
 			{#each oAuthProviders as provider}
 				<li>
 					<Tooltip.Root openDelay={0} closeDelay={0}>
-						<Tooltip.Trigger asChild let:builder>
-							{#await loadIcon(provider)}
-								<Button
-									formaction="/login?provider={provider}&{redirectTo}"
-									variant="outline"
-									size="icon"
-									builders={[builder]}
-									type="submit"
-								>
-									<LoaderCircle class="h-4 w-4 animate-spin" />
-								</Button>
-							{:then Icon}
-								<Button
-									formaction="/login?provider={provider}&{redirectTo}"
-									variant="outline"
-									size="icon"
-									builders={[builder]}
-									type="submit"
-								>
-									<Icon class="size-4" />
-									<span class="sr-only">Continue with {provider}</span>
-								</Button>
-							{:catch _}
-								<Button
-									formaction="/login?provider={provider}&{redirectTo}"
-									variant="outline"
-									builders={[builder]}
-									type="submit"
-								>
-									{provider.charAt(0).toUpperCase() + provider.slice(1)}
-								</Button>
-							{/await}
-						</Tooltip.Trigger>
+						<Tooltip.Trigger asChild >
+							{#snippet children({ builder })}
+														{#await loadIcon(provider)}
+									<Button
+										formaction="/login?provider={provider}&{redirectTo}"
+										variant="outline"
+										size="icon"
+										builders={[builder]}
+										type="submit"
+									>
+										<LoaderCircle class="h-4 w-4 animate-spin" />
+									</Button>
+								{:then Icon}
+									<Button
+										formaction="/login?provider={provider}&{redirectTo}"
+										variant="outline"
+										size="icon"
+										builders={[builder]}
+										type="submit"
+									>
+										<Icon class="size-4" />
+										<span class="sr-only">Continue with {provider}</span>
+									</Button>
+								{:catch _}
+									<Button
+										formaction="/login?provider={provider}&{redirectTo}"
+										variant="outline"
+										builders={[builder]}
+										type="submit"
+									>
+										{provider.charAt(0).toUpperCase() + provider.slice(1)}
+									</Button>
+								{/await}
+																				{/snippet}
+												</Tooltip.Trigger>
 						<Tooltip.Content side="bottom" sideOffset={8}>
 							Continue with {provider.charAt(0).toUpperCase() +
 								provider.slice(1)}

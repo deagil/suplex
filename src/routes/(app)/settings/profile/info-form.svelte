@@ -11,7 +11,11 @@
 	import LoaderCircle from '~icons/lucide/loader-circle';
 	import { infoFormSchema, type InfoFormSchema } from './schema';
 
-	export let data: SuperValidated<Infer<InfoFormSchema>>;
+	interface Props {
+		data: SuperValidated<Infer<InfoFormSchema>>;
+	}
+
+	let { data }: Props = $props();
 
 	const form = superForm(data, {
 		validators: zodClient(infoFormSchema),
@@ -31,16 +35,18 @@
 		</Card.Header>
 		<Card.Content>
 			<Form.Field {form} name="name">
-				<Form.Control let:attrs>
-					<Form.Label>Full Name</Form.Label>
-					<Input
-						{...attrs}
-						type="name"
-						placeholder="John Doe"
-						required
-						bind:value={$formData.name}
-					/>
-				</Form.Control>
+				<Form.Control >
+					{#snippet children({ attrs })}
+										<Form.Label>Full Name</Form.Label>
+						<Input
+							{...attrs}
+							type="name"
+							placeholder="John Doe"
+							required
+							bind:value={$formData.name}
+						/>
+														{/snippet}
+								</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 		</Card.Content>

@@ -3,27 +3,40 @@
 	import { cn } from '$lib/utils';
 	import type { Builder } from 'bits-ui';
 
-	export let href: string;
-	export let activeClass: string;
-	export let builder: Builder | undefined = undefined;
-	let cls: string = '';
-	export { cls as class };
+	interface Props {
+		href: string;
+		activeClass: string;
+		builder?: Builder | undefined;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
 
-	$: active = $page.url.pathname.startsWith(href);
+	let {
+		href,
+		activeClass,
+		builder = undefined,
+		class: cls = '',
+		children,
+		...rest
+	}: Props = $props();
+	
+
+	let active = $derived($page.url.pathname.startsWith(href));
 </script>
 
 {#if builder}
 	<a
 		{href}
 		class={cn(cls, active && activeClass)}
-		{...$$restProps}
+		{...rest}
 		use:builder.action
 		{...builder}
 	>
-		<slot />
+		{@render children?.()}
 	</a>
 {:else}
-	<a {href} class={cn(cls, active && activeClass)} {...$$restProps}>
-		<slot />
+	<a {href} class={cn(cls, active && activeClass)} {...rest}>
+		{@render children?.()}
 	</a>
 {/if}

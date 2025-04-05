@@ -8,7 +8,7 @@
 	import SocialsAuth from '../components/socials-auth.svelte';
 	import LoginForm from './login-form.svelte';
 
-	export let data;
+	let { data } = $props();
 	// export let form;
 
 	let { supabase } = data;

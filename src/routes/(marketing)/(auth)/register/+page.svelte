@@ -6,13 +6,12 @@
 	import SocialsAuth from '../components/socials-auth.svelte';
 	import RegisterForm from './register-form.svelte';
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
 	// Check form status
-	$: registrationSuccess = form?.success;
-	$: userEmail = form?.email;
-	$: signupDisabled = form?.signupDisabled;
+	let registrationSuccess = $derived(form?.success);
+	let userEmail = $derived(form?.email);
+	let signupDisabled = $derived(form?.signupDisabled);
 </script>
 
 <svelte:head>

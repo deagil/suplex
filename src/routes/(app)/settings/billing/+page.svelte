@@ -3,7 +3,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import UserProducts from './components/sections/user-products.svelte';
 
-	export let data;
+	let { data } = $props();
 
 	let {
 		products,
@@ -14,14 +14,14 @@
 	// <!-- TODO: uncomment once other payment models are correctly supported -->
 	// let showOtherPrices = false;
 
-	$: withDefaultPrices = products.map((product) => {
+	let withDefaultPrices = $derived(products.map((product) => {
 		return {
 			...product,
 			prices: product.prices.filter(
 				(price) => price.id === product.default_price.id,
 			),
 		};
-	});
+	}));
 
 	// <!-- TODO: uncomment once other payment models are correctly supported -->
 	// $: withOtherPrices = products.map((product) => {
@@ -33,13 +33,13 @@
 	// 	};
 	// });
 
-	$: currentSubscriptionsPrices = currentSubscriptions
+	let currentSubscriptionsPrices = $derived(currentSubscriptions
 		? currentSubscriptions
 				.map((subscription) => {
 					return subscription.items.data.map(({ price }) => price);
 				})
 				.flat(1)
-		: [];
+		: []);
 </script>
 
 <svelte:head>

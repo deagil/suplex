@@ -9,7 +9,11 @@
 	import SunIcon from 'virtual:icons/lucide/sun';
 	import UserIcon from 'virtual:icons/lucide/user-round';
 
-	export let user: User | null;
+	interface Props {
+		user: User | null;
+	}
+
+	let { user }: Props = $props();
 
 	let username =
 		user?.user_metadata.name ||
@@ -21,22 +25,24 @@
 
 <div>
 	<DropdownMenu.Root>
-		<DropdownMenu.Trigger asChild let:builder>
-			<Button
-				variant="secondary"
-				size="icon"
-				class="rounded-full"
-				builders={[builder]}
-			>
-				<span class="sr-only">Personal</span>
-				<Avatar.Root>
-					<Avatar.Image src={user?.user_metadata.avatar_url} alt={username} />
-					<Avatar.Fallback>
-						<UserIcon />
-					</Avatar.Fallback>
-				</Avatar.Root>
-			</Button>
-		</DropdownMenu.Trigger>
+		<DropdownMenu.Trigger asChild >
+			{#snippet children({ builder })}
+						<Button
+					variant="secondary"
+					size="icon"
+					class="rounded-full"
+					builders={[builder]}
+				>
+					<span class="sr-only">Personal</span>
+					<Avatar.Root>
+						<Avatar.Image src={user?.user_metadata.avatar_url} alt={username} />
+						<Avatar.Fallback>
+							<UserIcon />
+						</Avatar.Fallback>
+					</Avatar.Root>
+				</Button>
+								{/snippet}
+				</DropdownMenu.Trigger>
 
 		<DropdownMenu.Content align="end">
 			{#if !user}

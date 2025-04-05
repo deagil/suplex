@@ -3,7 +3,7 @@
 	import { WebsiteName } from '../../../../config';
 	import ForgotPasswordForm from './forgot-password-form.svelte';
 
-	export let data;
+	let { data } = $props();
 </script>
 
 <svelte:head>

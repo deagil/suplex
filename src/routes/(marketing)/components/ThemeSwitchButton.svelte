@@ -9,7 +9,12 @@
 
 	type Mode = typeof $userPrefersMode;
 
-	export let mode: Mode;
+	interface Props {
+		mode: Mode;
+		[key: string]: any
+	}
+
+	let { ...props }: Props = $props();
 
 	const settings: Record<
 		Mode,
@@ -36,14 +41,15 @@
 
 <Button
 	variant="ghost"
-	class={cn('w-full text-base', $$props.class)}
-	on:click={() => setMode(mode)}
+	class={cn('w-full text-base', props.class)}
+	on:click={() => setMode(props.mode)}
 >
-	{#if $userPrefersMode === mode}
+	{#if $userPrefersMode === props.mode}
 		<CheckIcon class="h-4 w-4 justify-self-end" />
 	{/if}
+	{@const SvelteComponent = settings[mode].icon}
 	<span class="col-[2] flex flex-nowrap items-center gap-2">
-		<svelte:component this={settings[mode].icon} class="h-4 w-4" />
+		<SvelteComponent class="h-4 w-4" />
 		{settings[mode].label}
 	</span>
 </Button>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { onNavigate } from '$app/navigation';
 	import PersonalMenu from '$lib/components/personal-menu.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
@@ -21,12 +21,12 @@
 		'/contact': 'Contact',
 	};
 
-	let menuOpen = false;
+	let menuOpen = $state(false);
 	onNavigate((_) => {
 		menuOpen = false;
 	});
 
-	export let data;
+	let { data, children } = $props();
 </script>
 
 <header class="sticky top-0 z-10 border-b border-border bg-card py-4">
@@ -56,34 +56,40 @@
 
 		<div class="justify-self-end sm:hidden">
 			<Drawer.Root bind:open={menuOpen}>
-				<Drawer.Trigger asChild let:builder>
-					<Button variant="ghost" size="icon" builders={[builder]}>
-						<span class="sr-only">Menu</span>
-						<MenuIcon />
-					</Button>
-				</Drawer.Trigger>
+				<Drawer.Trigger asChild >
+					{#snippet children({ builder })}
+										<Button variant="ghost" size="icon" builders={[builder]}>
+							<span class="sr-only">Menu</span>
+							<MenuIcon />
+						</Button>
+														{/snippet}
+								</Drawer.Trigger>
 				<Drawer.Content>
 					<Drawer.Header class="flex justify-end py-0">
-						<Drawer.Close asChild let:builder>
-							<Button variant="ghost" size="icon" builders={[builder]}>
-								<span class="sr-only">Close</span>
-								<XIcon />
-							</Button>
-						</Drawer.Close>
+						<Drawer.Close asChild >
+							{#snippet children({ builder })}
+														<Button variant="ghost" size="icon" builders={[builder]}>
+									<span class="sr-only">Close</span>
+									<XIcon />
+								</Button>
+																				{/snippet}
+												</Drawer.Close>
 					</Drawer.Header>
 					<Collapsible.Root>
-						<Collapsible.Trigger asChild let:builder>
-							<div class="p-2">
-								<Button
-									variant="ghost"
-									class="flex w-full flex-nowrap gap-2 text-base"
-									builders={[builder]}
-								>
-									Switch theme
-									<ChevronsUpDown class="size-4" />
-								</Button>
-							</div>
-						</Collapsible.Trigger>
+						<Collapsible.Trigger asChild >
+							{#snippet children({ builder })}
+														<div class="p-2">
+									<Button
+										variant="ghost"
+										class="flex w-full flex-nowrap gap-2 text-base"
+										builders={[builder]}
+									>
+										Switch theme
+										<ChevronsUpDown class="size-4" />
+									</Button>
+								</div>
+																				{/snippet}
+												</Collapsible.Trigger>
 						<Collapsible.Content>
 							<ul
 								class="grid grid-cols-[auto,auto] items-center gap-x-2 p-2 pt-0"
@@ -179,7 +185,7 @@
 </header>
 
 <main class="container mx-auto p-8">
-	<slot />
+	{@render children?.()}
 </main>
 
 <!-- Spacer grows so the footer can be at bottom on short pages -->

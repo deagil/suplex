@@ -5,11 +5,15 @@
 	import { cn } from '$lib/utils';
 	import Stripe from 'stripe';
 
-	export let userProducts: {
+	interface Props {
+		userProducts: {
 		stripe_product_id: string;
 		type: 'subscription' | 'payment';
 	}[];
-	export let products: Stripe.Product[];
+		products: Stripe.Product[];
+	}
+
+	let { userProducts, products }: Props = $props();
 </script>
 
 <section class="flex flex-col gap-3">
