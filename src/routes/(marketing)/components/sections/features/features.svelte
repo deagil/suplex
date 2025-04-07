@@ -97,12 +97,11 @@
 		{/each}
 	</Features.Root>
 	<div class="flex items-center p-10">
-		<Collapsible.Trigger asChild >
-			{#snippet children({ builder })}
-						<Button
-					class="mx-auto place-self-center text-center"
-					variant="link"
-					builders={[builder]}
+		<Collapsible.Trigger>
+			<Button
+				class="mx-auto place-self-center text-center"
+				variant="link"
+			>
 				>
 					Show {#if expanded}less{:else}more{/if} features
 					<LucideChevronDown
@@ -112,7 +111,6 @@
 						)}
 					/>
 				</Button>
-								{/snippet}
 				</Collapsible.Trigger>
 	</div>
 	<Collapsible.Content>

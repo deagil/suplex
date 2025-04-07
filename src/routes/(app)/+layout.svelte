@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import Home from '~icons/lucide/home';
 	import PanelLeft from '~icons/lucide/panel-left';
 	import Settings from '~icons/lucide/settings';
@@ -100,7 +100,7 @@
 				</Sheet.Content>
 			</Sheet.Root>
 			<Breadcrumbs />
-			<!-- <div class="relative ml-auto flex-1 md:grow-0">
+			 <div class="relative ml-auto flex-1 md:grow-0">
 				<Search
 					class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
 				/>
@@ -109,11 +109,38 @@
 					placeholder="Search..."
 					class="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
 				/>
-			</div> -->
+			</div> 
 			<PersonalMenu user={data.user} />
 		</header>
 		<main class="flex flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
 			{@render children?.()}
 		</main>
 	</div>
-</div>
+</div> -->
+
+<script lang="ts">
+	import AppSidebar from "$lib/components/app-sidebar.svelte";
+	import Breadcrumbs from './components/breadcrumbs.svelte';
+	import { Separator } from "$lib/components/ui/separator/index.js";
+	import * as Sidebar from "$lib/components/ui/sidebar/index.js";
+	import FloatingSidebar from "$lib/components/floating-sidebar.svelte";
+	let { data, children } = $props();
+</script>
+
+<Sidebar.Provider>
+	<AppSidebar side="left"/>
+	<Sidebar.Inset>
+		<header class="flex h-16 shrink-0 items-center gap-4">
+			<div class="flex items-center gap-2 px-4">
+				<Sidebar.Trigger class="-ml-1" />
+				<Separator orientation="vertical" class="mr-2 h-4" />
+				<Breadcrumbs />
+			</div>
+		</header>
+		<div class="flex flex-1 flex-col gap-4 p-4 pt-0">
+			{@render children?.()}
+			<!-- //<div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"></div> -->
+		</div>
+	</Sidebar.Inset>
+	<FloatingSidebar side="right"/>
+</Sidebar.Provider>

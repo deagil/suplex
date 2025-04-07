@@ -51,7 +51,7 @@
 			{:else}
 				<Button href="/login">Get Started Now</Button>
 			{/if}
-			<PersonalMenu user={data.user} />
+			<!-- <PersonalMenu user={data.user} /> -->
 		</div>
 
 		<div class="justify-self-end sm:hidden">

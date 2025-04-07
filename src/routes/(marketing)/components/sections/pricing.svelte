@@ -8,7 +8,7 @@
 		product: Stripe.Product;
 	};
 	interface Props {
-		prices: readonly [Price, Price, Price];
+		prices: readonly [Price];
 	}
 
 	let { prices }: Props = $props();

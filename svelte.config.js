@@ -10,6 +10,9 @@ const config = {
 		adapter: adapter(),
 	},
 	preprocess: vitePreprocess(),
+	optimizeDeps: {
+		exclude: ['lucide']
+	},
 };
 
 export default config;
