@@ -51,34 +51,34 @@
 			{:else}
 				<Button href="/login">Get Started Now</Button>
 			{/if}
-			<!-- <PersonalMenu user={data.user} /> -->
+			<PersonalMenu user={data.user} />
 		</div>
 
 		<div class="justify-self-end sm:hidden">
 			<Drawer.Root bind:open={menuOpen}>
-				<Drawer.Trigger asChild >
+				<Drawer.Trigger asChild>
 					{#snippet children({ builder })}
-										<Button variant="ghost" size="icon" builders={[builder]}>
+						<Button variant="ghost" size="icon" builders={[builder]}>
 							<span class="sr-only">Menu</span>
 							<MenuIcon />
 						</Button>
-														{/snippet}
-								</Drawer.Trigger>
+					{/snippet}
+				</Drawer.Trigger>
 				<Drawer.Content>
 					<Drawer.Header class="flex justify-end py-0">
-						<Drawer.Close asChild >
+						<Drawer.Close asChild>
 							{#snippet children({ builder })}
-														<Button variant="ghost" size="icon" builders={[builder]}>
+								<Button variant="ghost" size="icon" builders={[builder]}>
 									<span class="sr-only">Close</span>
 									<XIcon />
 								</Button>
-																				{/snippet}
-												</Drawer.Close>
+							{/snippet}
+						</Drawer.Close>
 					</Drawer.Header>
 					<Collapsible.Root>
-						<Collapsible.Trigger asChild >
+						<Collapsible.Trigger asChild>
 							{#snippet children({ builder })}
-														<div class="p-2">
+								<div class="p-2">
 									<Button
 										variant="ghost"
 										class="flex w-full flex-nowrap gap-2 text-base"
@@ -88,8 +88,8 @@
 										<ChevronsUpDown class="size-4" />
 									</Button>
 								</div>
-																				{/snippet}
-												</Collapsible.Trigger>
+							{/snippet}
+						</Collapsible.Trigger>
 						<Collapsible.Content>
 							<ul
 								class="grid grid-cols-[auto,auto] items-center gap-x-2 p-2 pt-0"

@@ -25,14 +25,9 @@
 
 <div>
 	<DropdownMenu.Root>
-		<DropdownMenu.Trigger asChild >
-			{#snippet children({ builder })}
-						<Button
-					variant="secondary"
-					size="icon"
-					class="rounded-full"
-					builders={[builder]}
-				>
+		<DropdownMenu.Trigger>
+			{#snippet children()}
+				<Button variant="secondary" size="icon" class="rounded-full">
 					<span class="sr-only">Personal</span>
 					<Avatar.Root>
 						<Avatar.Image src={user?.user_metadata.avatar_url} alt={username} />
@@ -41,8 +36,8 @@
 						</Avatar.Fallback>
 					</Avatar.Root>
 				</Button>
-								{/snippet}
-				</DropdownMenu.Trigger>
+			{/snippet}
+		</DropdownMenu.Trigger>
 
 		<DropdownMenu.Content align="end">
 			{#if !user}
