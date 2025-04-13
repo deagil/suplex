@@ -119,16 +119,16 @@
 </div> -->
 
 <script lang="ts">
-	import AppSidebar from "$lib/components/app-sidebar.svelte";
+	import AppSidebar from '$lib/components/app-sidebar.svelte';
 	import Breadcrumbs from './components/breadcrumbs.svelte';
-	import { Separator } from "$lib/components/ui/separator/index.js";
-	import * as Sidebar from "$lib/components/ui/sidebar/index.js";
-	import FloatingSidebar from "$lib/components/floating-sidebar.svelte";
+	import { Separator } from '$lib/components/ui/separator/index.js';
+	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+	import FloatingSidebar from '$lib/components/floating-sidebar.svelte';
 	let { data, children } = $props();
 </script>
 
 <Sidebar.Provider>
-	<AppSidebar side="left"/>
+	<AppSidebar side="left" />
 	<Sidebar.Inset>
 		<header class="flex h-16 shrink-0 items-center gap-4">
 			<div class="flex items-center gap-2 px-4">
@@ -142,5 +142,5 @@
 			<!-- //<div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"></div> -->
 		</div>
 	</Sidebar.Inset>
-	<FloatingSidebar side="right"/>
+	<FloatingSidebar side="right" collapsible="offcanvas" />
 </Sidebar.Provider>

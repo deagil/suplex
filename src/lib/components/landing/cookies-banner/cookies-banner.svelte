@@ -50,7 +50,7 @@
 						</p>
 					</div>
 					<div class="flex justify-end gap-3">
-						<Button variant="outline" on:click={handleAccept}>OK</Button>
+						<Button variant="outline" onclick={handleAccept}>OK</Button>
 					</div>
 				</div>
 			</Card.Content>

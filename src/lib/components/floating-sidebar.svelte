@@ -60,7 +60,7 @@
 </script>
 
 <Sidebar.Root collapsible="icon" variant="floating" {...restProps}>
-	<Sidebar.Header>
+	<!-- <Sidebar.Header>
 		<Sidebar.Menu>
 			<Sidebar.MenuItem>
 				<Sidebar.MenuButton size="lg">
@@ -80,7 +80,7 @@
 				</Sidebar.MenuButton>
 			</Sidebar.MenuItem>
 		</Sidebar.Menu>
-	</Sidebar.Header>
+	</Sidebar.Header> -->
 	<Sidebar.Content>
 		<Chat></Chat>
 		<!-- <Sidebar.Group>
