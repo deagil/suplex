@@ -73,9 +73,9 @@
 					form={isUpdate ? changeForm : createForm}
 					name="old_password"
 				>
-					<Form.Control >
+					<Form.Control>
 						{#snippet children({ props })}
-												<Form.Label>Old Password</Form.Label>
+							<Form.Label>Old Password</Form.Label>
 							<Input
 								{...props}
 								type="password"
@@ -83,15 +83,15 @@
 								required
 								bind:value={$formData.old_password}
 							/>
-																	{/snippet}
-										</Form.Control>
+						{/snippet}
+					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			{/if}
 			<Form.Field form={isUpdate ? changeForm : createForm} name="new_password">
-				<Form.Control >
+				<Form.Control>
 					{#snippet children({ props })}
-										<Form.Label>New Password</Form.Label>
+						<Form.Label>New Password</Form.Label>
 						<Input
 							{...props}
 							type="password"
@@ -100,17 +100,17 @@
 							required
 							bind:value={$formData.new_password}
 						/>
-														{/snippet}
-								</Form.Control>
+					{/snippet}
+				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 			<Form.Field
 				form={isUpdate ? changeForm : createForm}
 				name="confirm_password"
 			>
-				<Form.Control >
+				<Form.Control>
 					{#snippet children({ props })}
-										<Form.Label>Confirm Password</Form.Label>
+						<Form.Label>Confirm Password</Form.Label>
 						<Input
 							{...props}
 							type="password"
@@ -119,8 +119,8 @@
 							required
 							bind:value={$formData.confirm_password}
 						/>
-														{/snippet}
-								</Form.Control>
+					{/snippet}
+				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 		</Card.Content>

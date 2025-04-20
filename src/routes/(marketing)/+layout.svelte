@@ -57,36 +57,36 @@
 			<Drawer.Root bind:open={menuOpen}>
 				<Drawer.Trigger>
 					{#snippet child({ props })}
-										<Button variant="ghost" size="icon" {...props}>
+						<Button variant="ghost" size="icon" {...props}>
 							<span class="sr-only">Menu</span>
 							<MenuIcon />
 						</Button>
-														{/snippet}
-								</Drawer.Trigger>
+					{/snippet}
+				</Drawer.Trigger>
 				<Drawer.Content>
 					<Drawer.Header class="flex justify-end py-0">
 						<Drawer.Close>
 							{#snippet child({ props })}
-														<Button variant="ghost" size="icon" {...props}>
+								<Button variant="ghost" size="icon" {...props}>
 									<span class="sr-only">Close</span>
 									<MenuIcon />
 								</Button>
-																				{/snippet}
-												</Drawer.Close>
+							{/snippet}
+						</Drawer.Close>
 					</Drawer.Header>
 					<Collapsible.Root>
 						<Collapsible.Trigger>
 							{#snippet child({ props })}
-														<Button
-											variant="ghost"
-											class="flex w-full flex-nowrap gap-2 text-base"
-											{...props}
-										>
-											<span class="flex-1">Switch theme</span>
-											<ChevronsUpDown class="size-4" />
-										</Button>
-																				{/snippet}
-												</Collapsible.Trigger>
+								<Button
+									variant="ghost"
+									class="flex w-full flex-nowrap gap-2 text-base"
+									{...props}
+								>
+									<span class="flex-1">Switch theme</span>
+									<ChevronsUpDown class="size-4" />
+								</Button>
+							{/snippet}
+						</Collapsible.Trigger>
 						<Collapsible.Content>
 							<ul
 								class="grid grid-cols-[auto,auto] items-center gap-x-2 p-2 pt-0"

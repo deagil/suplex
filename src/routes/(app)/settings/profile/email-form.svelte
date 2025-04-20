@@ -40,9 +40,9 @@
 		</Card.Header>
 		<Card.Content>
 			<Form.Field {form} name="email">
-				<Form.Control >
+				<Form.Control>
 					{#snippet children({ props })}
-										<Form.Label>Email</Form.Label>
+						<Form.Label>Email</Form.Label>
 						<Input
 							{...props}
 							type="email"
@@ -50,8 +50,8 @@
 							required
 							bind:value={$formData.email}
 						/>
-														{/snippet}
-								</Form.Control>
+					{/snippet}
+				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 			{#if !$message?.success && user?.new_email}

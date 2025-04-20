@@ -1,34 +1,34 @@
 <script lang="ts" module>
-	import { type VariantProps, tv } from "tailwind-variants";
+	import { type VariantProps, tv } from 'tailwind-variants';
 
 	export const alertVariants = tv({
-		base: "[&>svg]:text-foreground relative w-full rounded-lg border p-4 [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg~*]:pl-7",
+		base: '[&>svg]:text-foreground relative w-full rounded-lg border p-4 [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg~*]:pl-7',
 		variants: {
 			variant: {
-				default: "bg-background text-foreground",
+				default: 'bg-background text-foreground',
 				destructive:
-					"border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
+					'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',
 				warning:
 					'border-yellow-500/50 text-yellow-600 dark:border-yellow-600 [&>svg]:text-yellow-600',
 			},
 		},
 		defaultVariants: {
-			variant: "default",
+			variant: 'default',
 		},
 	});
 
-	export type AlertVariant = VariantProps<typeof alertVariants>["variant"];
+	export type AlertVariant = VariantProps<typeof alertVariants>['variant'];
 </script>
 
 <script lang="ts">
-	import { cn } from "$lib/utils.js";
-	import type { WithElementRef } from "bits-ui";
-	import type { HTMLAttributes } from "svelte/elements";
+	import { cn } from '$lib/utils.js';
+	import type { WithElementRef } from 'bits-ui';
+	import type { HTMLAttributes } from 'svelte/elements';
 
 	let {
 		ref = $bindable(null),
 		class: className,
-		variant = "default",
+		variant = 'default',
 		children,
 		...restProps
 	}: WithElementRef<HTMLAttributes<HTMLDivElement>> & {
@@ -36,6 +36,11 @@
 	} = $props();
 </script>
 
-<div bind:this={ref} class={cn(alertVariants({ variant }), className)} {...restProps} role="alert">
+<div
+	bind:this={ref}
+	class={cn(alertVariants({ variant }), className)}
+	{...restProps}
+	role="alert"
+>
 	{@render children?.()}
 </div>

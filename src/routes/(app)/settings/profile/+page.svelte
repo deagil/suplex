@@ -29,9 +29,9 @@
 	<Card.Content>
 		{#if data.deleteAccountForm}
 			<Dialog.Root>
-				<Dialog.Trigger >
+				<Dialog.Trigger>
 					{#snippet child({ props })}
-										<Button
+						<Button
 							variant="destructive"
 							class="flex flex-nowrap items-center gap-2"
 							{...props}
@@ -39,8 +39,8 @@
 							<Trash class="h-4 w-4" />
 							Delete Account
 						</Button>
-														{/snippet}
-								</Dialog.Trigger>
+					{/snippet}
+				</Dialog.Trigger>
 				<Dialog.Content class="border-destructive">
 					<Dialog.Header>
 						<Dialog.Title>Are you sure absolutely sure?</Dialog.Title>

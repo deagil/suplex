@@ -7,7 +7,7 @@
 		activeClass: string;
 		class?: string;
 		children?: import('svelte').Snippet;
-		[key: string]: any
+		[key: string]: any;
 	}
 
 	let {
@@ -17,15 +17,10 @@
 		children,
 		...rest
 	}: Props = $props();
-	
 
 	let active = $derived(page.url.pathname.startsWith(href));
 </script>
 
-<a
-	{href}
-	class={cn(cls, active && activeClass)}
-	{...rest}
->
+<a {href} class={cn(cls, active && activeClass)} {...rest}>
 	{@render children?.()}
 </a>

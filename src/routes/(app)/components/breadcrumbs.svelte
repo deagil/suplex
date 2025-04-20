@@ -2,10 +2,12 @@
 	import { page } from '$app/stores';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 
-	let parts = $derived($page.url.pathname
-		.split('/')
-		.filter(Boolean)
-		.filter((part) => part !== 'dashboard'));
+	let parts = $derived(
+		$page.url.pathname
+			.split('/')
+			.filter(Boolean)
+			.filter((part) => part !== 'dashboard'),
+	);
 </script>
 
 <Breadcrumb.Root class="hidden md:flex">

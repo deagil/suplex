@@ -30,9 +30,9 @@
 	{:else}
 		<div class="flex flex-wrap gap-2">
 			<Form.Field class="flex-1" {form} name="name">
-				<Form.Control >
+				<Form.Control>
 					{#snippet children({ props })}
-										<Form.Label>Name</Form.Label>
+						<Form.Label>Name</Form.Label>
 						<Input
 							{...props}
 							type="text"
@@ -40,14 +40,14 @@
 							required
 							bind:value={$formData.name}
 						/>
-														{/snippet}
-								</Form.Control>
+					{/snippet}
+				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 			<Form.Field class="flex-1" {form} name="email">
-				<Form.Control >
+				<Form.Control>
 					{#snippet children({ props })}
-										<Form.Label class="mb-2">Email</Form.Label>
+						<Form.Label class="mb-2">Email</Form.Label>
 						<Input
 							{...props}
 							type="email"
@@ -55,15 +55,15 @@
 							required
 							bind:value={$formData.email}
 						/>
-														{/snippet}
-								</Form.Control>
+					{/snippet}
+				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 		</div>
 		<Form.Field class="flex-1" {form} name="subject">
-			<Form.Control >
+			<Form.Control>
 				{#snippet children({ props })}
-								<Form.Label class="mb-2">Subject</Form.Label>
+					<Form.Label class="mb-2">Subject</Form.Label>
 					<Input
 						{...props}
 						type="text"
@@ -71,22 +71,22 @@
 						required
 						bind:value={$formData.subject}
 					/>
-											{/snippet}
-						</Form.Control>
+				{/snippet}
+			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
 		<Form.Field {form} name="body">
-			<Form.Control >
+			<Form.Control>
 				{#snippet children({ props })}
-								<Form.Label class="mb-2">Message</Form.Label>
+					<Form.Label class="mb-2">Message</Form.Label>
 					<Textarea
 						rows={10}
 						{...props}
 						placeholder="Type your message here."
 						bind:value={$formData.body}
 					/>
-											{/snippet}
-						</Form.Control>
+				{/snippet}
+			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
 		<Form.Button class="w-full" disabled={$submitting}>

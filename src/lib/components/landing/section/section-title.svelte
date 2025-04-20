@@ -1,11 +1,9 @@
 <script lang="ts">
-	
-
 	interface Props {
 		level?: 2 | 3 | 4 | 5 | 6;
 		anchor?: string;
 		children?: import('svelte').Snippet;
-		[key: string]: any
+		[key: string]: any;
 	}
 
 	let { level = 2, children, ...rest }: Props = $props();

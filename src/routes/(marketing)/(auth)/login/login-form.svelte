@@ -33,9 +33,9 @@
 	class="grid gap-4"
 >
 	<Form.Field {form} name="email">
-		<Form.Control >
+		<Form.Control>
 			{#snippet children({ props })}
-						<Form.Label class="mb-2">Email</Form.Label>
+				<Form.Label class="mb-2">Email</Form.Label>
 				<Input
 					{...props}
 					type="email"
@@ -43,14 +43,14 @@
 					required
 					bind:value={$formData.email}
 				/>
-								{/snippet}
-				</Form.Control>
+			{/snippet}
+		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="password">
-		<Form.Control >
+		<Form.Control>
 			{#snippet children({ props })}
-						<div class="mb-2 flex items-center">
+				<div class="mb-2 flex items-center">
 					<Form.Label>Password</Form.Label>
 					<a
 						href="/forgot-password"
@@ -66,8 +66,8 @@
 					required
 					bind:value={$formData.password}
 				/>
-								{/snippet}
-				</Form.Control>
+			{/snippet}
+		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Button class="w-full" disabled={$submitting}>

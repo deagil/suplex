@@ -35,9 +35,9 @@
 		</Card.Header>
 		<Card.Content>
 			<Form.Field {form} name="name">
-				<Form.Control >
+				<Form.Control>
 					{#snippet children({ props })}
-										<Form.Label>Full Name</Form.Label>
+						<Form.Label>Full Name</Form.Label>
 						<Input
 							{...props}
 							type="name"
@@ -45,8 +45,8 @@
 							required
 							bind:value={$formData.name}
 						/>
-														{/snippet}
-								</Form.Control>
+					{/snippet}
+				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 		</Card.Content>

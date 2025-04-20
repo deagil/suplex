@@ -27,14 +27,14 @@
 	<Form.Field {form} name="email">
 		<Form.Control>
 			{#snippet children({ props })}
-			<Form.Label class="mb-2">Email</Form.Label>
-			<Input
-				{...props}
-				type="email"
-				placeholder="name@example.com"
-				required
-				bind:value={$formData.email}
-			/>
+				<Form.Label class="mb-2">Email</Form.Label>
+				<Input
+					{...props}
+					type="email"
+					placeholder="name@example.com"
+					required
+					bind:value={$formData.email}
+				/>
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />
@@ -42,14 +42,14 @@
 	<Form.Field {form} name="password">
 		<Form.Control>
 			{#snippet children({ props })}
-			<Form.Label>Password</Form.Label>
-			<Input
-				{...props}
-				type="password"
-				placeholder="••••••••"
-				required
-				bind:value={$formData.password}
-			/>
+				<Form.Label>Password</Form.Label>
+				<Input
+					{...props}
+					type="password"
+					placeholder="••••••••"
+					required
+					bind:value={$formData.password}
+				/>
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />

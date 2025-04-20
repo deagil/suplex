@@ -2,7 +2,6 @@
 	import ChangePasswordForm from './change-password-form.svelte';
 	import CreatePasswordForm from './create-password-form.svelte';
 
-
 	let { data, form } = $props();
 </script>
 

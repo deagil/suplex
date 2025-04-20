@@ -27,12 +27,7 @@
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger>
 			{#snippet child({ props })}
-						<Button
-					variant="secondary"
-					size="icon"
-					class="rounded-full"
-					{...props}
-				>
+				<Button variant="secondary" size="icon" class="rounded-full" {...props}>
 					<span class="sr-only">Personal</span>
 					<Avatar.Root>
 						<Avatar.Image src={user?.user_metadata.avatar_url} alt={username} />
@@ -41,13 +36,19 @@
 						</Avatar.Fallback>
 					</Avatar.Root>
 				</Button>
-								{/snippet}
-				</DropdownMenu.Trigger>
+			{/snippet}
+		</DropdownMenu.Trigger>
 
 		<DropdownMenu.Content align="end">
 			{#if !user}
-				<DropdownMenu.Item>{#snippet child({props})}<a href="/login" {...props}>Login</a>{/snippet}</DropdownMenu.Item>
-				<DropdownMenu.Item>{#snippet child({props})}<a href="/register" {...props}>Register</a>{/snippet}</DropdownMenu.Item>
+				<DropdownMenu.Item
+					>{#snippet child({ props })}<a href="/login" {...props}>Login</a
+						>{/snippet}</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					>{#snippet child({ props })}<a href="/register" {...props}>Register</a
+						>{/snippet}</DropdownMenu.Item
+				>
 			{:else}
 				<DropdownMenu.Label>
 					Welcome back,<br /><strong>{username}</strong>
@@ -72,8 +73,14 @@
 			</DropdownMenu.RadioGroup>
 			{#if user}
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item>{#snippet child({props})}<a href="/settings" {...props}>Settings</a>{/snippet}</DropdownMenu.Item>
-				<DropdownMenu.Item>{#snippet child({props})}<a href="/log-out" {...props}>Log out</a>{/snippet}</DropdownMenu.Item>
+				<DropdownMenu.Item
+					>{#snippet child({ props })}<a href="/settings" {...props}>Settings</a
+						>{/snippet}</DropdownMenu.Item
+				>
+				<DropdownMenu.Item
+					>{#snippet child({ props })}<a href="/log-out" {...props}>Log out</a
+						>{/snippet}</DropdownMenu.Item
+				>
 			{/if}
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>

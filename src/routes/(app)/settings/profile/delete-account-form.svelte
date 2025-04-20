@@ -37,7 +37,7 @@
 	<Form.Field {form} name="confirmation">
 		<Form.Control>
 			{#snippet children({ props })}
-						<Form.Label>To confirm, please type in your password:</Form.Label>
+				<Form.Label>To confirm, please type in your password:</Form.Label>
 				<Input
 					{...props}
 					type="password"
@@ -45,8 +45,8 @@
 					disabled={$submitting}
 					bind:value={$formData.confirmation}
 				/>
-								{/snippet}
-				</Form.Control>
+			{/snippet}
+		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Dialog.Footer>
@@ -65,10 +65,10 @@
 		</Form.Button>
 		<Dialog.Close>
 			{#snippet child({ props })}
-						<Form.Button type="reset" variant="default" {...props}>
+				<Form.Button type="reset" variant="default" {...props}>
 					Cancel
 				</Form.Button>
-								{/snippet}
-				</Dialog.Close>
+			{/snippet}
+		</Dialog.Close>
 	</Dialog.Footer>
 </form>

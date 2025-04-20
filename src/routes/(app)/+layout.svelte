@@ -29,7 +29,7 @@
 			<Tooltip.Root>
 				<Tooltip.Trigger>
 					{#snippet child({ props })}
-										<NavLink
+						<NavLink
 							href="/dashboard"
 							class="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
 							activeClass="bg-accent text-accent-foreground"
@@ -38,8 +38,8 @@
 							<Home class="h-5 w-5" />
 							<span class="sr-only">Dashboard</span>
 						</NavLink>
-														{/snippet}
-								</Tooltip.Trigger>
+					{/snippet}
+				</Tooltip.Trigger>
 				<Tooltip.Content side="right">Dashboard</Tooltip.Content>
 			</Tooltip.Root>
 		</nav>
@@ -47,7 +47,7 @@
 			<Tooltip.Root>
 				<Tooltip.Trigger>
 					{#snippet child({ props })}
-										<NavLink
+						<NavLink
 							href="/settings"
 							class="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
 							activeClass="bg-accent text-accent-foreground"
@@ -56,8 +56,8 @@
 							<Settings class="h-5 w-5" />
 							<span class="sr-only">Settings</span>
 						</NavLink>
-														{/snippet}
-								</Tooltip.Trigger>
+					{/snippet}
+				</Tooltip.Trigger>
 				<Tooltip.Content side="right">Settings</Tooltip.Content>
 			</Tooltip.Root>
 		</nav>
@@ -69,17 +69,12 @@
 			<Sheet.Root>
 				<Sheet.Trigger>
 					{#snippet child({ props })}
-										<Button
-							size="icon"
-							variant="outline"
-							class="sm:hidden"
-							{...props}
-						>
+						<Button size="icon" variant="outline" class="sm:hidden" {...props}>
 							<PanelLeft class="h-5 w-5" />
 							<span class="sr-only">Toggle Menu</span>
 						</Button>
-														{/snippet}
-								</Sheet.Trigger>
+					{/snippet}
+				</Sheet.Trigger>
 				<Sheet.Content side="left" class="sm:max-w-xs">
 					<nav class="grid gap-6 text-lg font-medium">
 						<a

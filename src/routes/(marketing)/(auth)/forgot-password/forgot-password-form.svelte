@@ -40,9 +40,9 @@
 		</p>
 	{:else}
 		<Form.Field {form} name="email">
-			<Form.Control >
+			<Form.Control>
 				{#snippet children({ props })}
-								<Form.Label class="mb-2">Email</Form.Label>
+					<Form.Label class="mb-2">Email</Form.Label>
 					<Input
 						{...props}
 						type="email"
@@ -50,8 +50,8 @@
 						required
 						bind:value={$formData.email}
 					/>
-											{/snippet}
-						</Form.Control>
+				{/snippet}
+			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
 		<Form.Button class="w-full" disabled={$submitting}>

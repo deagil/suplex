@@ -70,9 +70,7 @@
 				class="mb-4 flex min-h-80 flex-nowrap items-start gap-4"
 			>
 				{@const SvelteComponent = icon}
-				<SvelteComponent
-					class="size-10 flex-shrink-0 fill-primary"
-				/>
+				<SvelteComponent class="size-10 flex-shrink-0 fill-primary" />
 				<div>
 					<Features.Term class="mb-3 leading-none">
 						<span>{title}</span>
@@ -99,7 +97,7 @@
 	<div class="flex items-center p-10">
 		<Collapsible.Trigger>
 			{#snippet child({ props })}
-						<Button
+				<Button
 					class="mx-auto place-self-center text-center"
 					variant="link"
 					{...props}
@@ -112,8 +110,8 @@
 						)}
 					/>
 				</Button>
-								{/snippet}
-				</Collapsible.Trigger>
+			{/snippet}
+		</Collapsible.Trigger>
 	</div>
 	<Collapsible.Content>
 		<Features.Root>
@@ -121,9 +119,7 @@
 				<Features.FeatureItem>
 					{@const SvelteComponent_2 = icon}
 					<div class="mb-4 flex flex-nowrap items-start gap-4">
-						<SvelteComponent_2
-							class="h-8 w-8 flex-shrink-0 fill-primary"
-						/>
+						<SvelteComponent_2 class="h-8 w-8 flex-shrink-0 fill-primary" />
 						<Features.Term>{title}</Features.Term>
 					</div>
 					<Features.Description class="hyphens-auto text-justify">

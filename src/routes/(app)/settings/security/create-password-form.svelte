@@ -47,9 +47,9 @@
 		/>
 		<Card.Content>
 			<Form.Field {form} name="new_password">
-				<Form.Control >
+				<Form.Control>
 					{#snippet children({ props })}
-										<Form.Label>New Password</Form.Label>
+						<Form.Label>New Password</Form.Label>
 						<Input
 							{...props}
 							type="password"
@@ -58,14 +58,14 @@
 							required
 							bind:value={$formData.new_password}
 						/>
-														{/snippet}
-								</Form.Control>
+					{/snippet}
+				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 			<Form.Field {form} name="confirm_password">
-				<Form.Control >
+				<Form.Control>
 					{#snippet children({ props })}
-										<Form.Label>Confirm New Password</Form.Label>
+						<Form.Label>Confirm New Password</Form.Label>
 						<Input
 							{...props}
 							type="password"
@@ -74,8 +74,8 @@
 							required
 							bind:value={$formData.confirm_password}
 						/>
-														{/snippet}
-								</Form.Control>
+					{/snippet}
+				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 		</Card.Content>

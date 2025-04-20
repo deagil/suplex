@@ -13,7 +13,7 @@
 		disabled?: boolean | null | undefined;
 		class?: string | null | undefined;
 		children?: import('svelte').Snippet;
-		[key: string]: any
+		[key: string]: any;
 	}
 
 	let {
@@ -23,7 +23,6 @@
 		children,
 		...rest
 	}: Props = $props();
-	
 </script>
 
 {#if price.custom_unit_amount !== null}

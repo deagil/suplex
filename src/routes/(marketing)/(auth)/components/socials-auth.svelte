@@ -25,7 +25,9 @@
 		}
 	}
 
-	let redirectTo = $derived(`redirectTo=${encodeURIComponent(`${$page.url.origin}/auth/callback?${$page.url.search}`)}`);
+	let redirectTo = $derived(
+		`redirectTo=${encodeURIComponent(`${$page.url.origin}/auth/callback?${$page.url.search}`)}`,
+	);
 </script>
 
 {#if oAuthProviders.length > 0}
@@ -40,8 +42,8 @@
 				<li>
 					<Tooltip.Root>
 						{#await loadIcon(provider)}
-						<Tooltip.Trigger>
-							{#snippet child({ props })}
+							<Tooltip.Trigger>
+								{#snippet child({ props })}
 									<Button
 										formaction="/login?provider={provider}&{redirectTo}"
 										variant="outline"
@@ -52,10 +54,10 @@
 										<LoaderCircle class="h-4 w-4 animate-spin" />
 									</Button>
 								{/snippet}
-								</Tooltip.Trigger>
-								{:then Icon}
-								<Tooltip.Trigger>
-									{#snippet child({ props })}
+							</Tooltip.Trigger>
+						{:then Icon}
+							<Tooltip.Trigger>
+								{#snippet child({ props })}
 									<Button
 										formaction="/login?provider={provider}&{redirectTo}"
 										variant="outline"
@@ -67,10 +69,10 @@
 										<span class="sr-only">Continue with {provider}</span>
 									</Button>
 								{/snippet}
-								</Tooltip.Trigger>
-								{:catch _}
-								<Tooltip.Trigger>
-									{#snippet child({ props })}
+							</Tooltip.Trigger>
+						{:catch _}
+							<Tooltip.Trigger>
+								{#snippet child({ props })}
 									<Button
 										formaction="/login?provider={provider}&{redirectTo}"
 										variant="outline"
@@ -80,8 +82,8 @@
 										{provider.charAt(0).toUpperCase() + provider.slice(1)}
 									</Button>
 								{/snippet}
-								</Tooltip.Trigger>
-								{/await}
+							</Tooltip.Trigger>
+						{/await}
 						<Tooltip.Content side="bottom" sideOffset={8}>
 							Continue with {provider.charAt(0).toUpperCase() +
 								provider.slice(1)}

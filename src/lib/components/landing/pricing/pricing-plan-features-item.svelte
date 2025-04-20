@@ -3,7 +3,7 @@
 	import LucideCheck from '~icons/lucide/check';
 	interface Props {
 		children?: import('svelte').Snippet;
-		[key: string]: any
+		[key: string]: any;
 	}
 
 	let { ...props }: Props = $props();
