@@ -14,8 +14,12 @@
 	import TriangleAlert from '~icons/lucide/triangle-alert';
 	import { emailFormSchema, type EmailFormSchema } from './schema';
 
-	export let data: SuperValidated<Infer<EmailFormSchema>>;
-	export let user: User | null;
+	interface Props {
+		data: SuperValidated<Infer<EmailFormSchema>>;
+		user: User | null;
+	}
+
+	let { data, user }: Props = $props();
 
 	const form = superForm(data, {
 		validators: zodClient(emailFormSchema),
@@ -36,16 +40,18 @@
 		</Card.Header>
 		<Card.Content>
 			<Form.Field {form} name="email">
-				<Form.Control let:attrs>
-					<Form.Label>Email</Form.Label>
-					<Input
-						{...attrs}
-						type="email"
-						placeholder="name@example.com"
-						required
-						bind:value={$formData.email}
-					/>
-				</Form.Control>
+				<Form.Control >
+					{#snippet children({ props })}
+										<Form.Label>Email</Form.Label>
+						<Input
+							{...props}
+							type="email"
+							placeholder="name@example.com"
+							required
+							bind:value={$formData.email}
+						/>
+														{/snippet}
+								</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 			{#if !$message?.success && user?.new_email}

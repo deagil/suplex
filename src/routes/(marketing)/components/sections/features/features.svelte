@@ -60,7 +60,7 @@
 
 	const SHOW_BASE = 2;
 
-	let expanded: boolean = false;
+	let expanded: boolean = $state(false);
 </script>
 
 <Collapsible.Root class="mx-auto max-w-screen-lg" bind:open={expanded}>
@@ -69,8 +69,8 @@
 			<Features.FeatureItem
 				class="mb-4 flex min-h-80 flex-nowrap items-start gap-4"
 			>
-				<svelte:component
-					this={icon}
+				{@const SvelteComponent = icon}
+				<SvelteComponent
 					class="size-10 flex-shrink-0 fill-primary"
 				/>
 				<div>
@@ -86,7 +86,8 @@
 				class="flex flex-col items-center justify-start"
 			>
 				{#if showcase}
-					<svelte:component this={showcase} />
+					{@const SvelteComponent_1 = showcase}
+					<SvelteComponent_1 />
 				{:else}
 					<div
 						class="h-full min-h-80 w-full rounded-lg bg-black opacity-5 dark:bg-white"
@@ -96,29 +97,31 @@
 		{/each}
 	</Features.Root>
 	<div class="flex items-center p-10">
-		<Collapsible.Trigger asChild let:builder>
-			<Button
-				class="mx-auto place-self-center text-center"
-				variant="link"
-				builders={[builder]}
-			>
-				Show {#if expanded}less{:else}more{/if} features
-				<LucideChevronDown
-					class={cn(
-						'ms-2 size-4 transition-transform',
-						expanded && '-rotate-180',
-					)}
-				/>
-			</Button>
-		</Collapsible.Trigger>
+		<Collapsible.Trigger>
+			{#snippet child({ props })}
+						<Button
+					class="mx-auto place-self-center text-center"
+					variant="link"
+					{...props}
+				>
+					Show {#if expanded}less{:else}more{/if} features
+					<LucideChevronDown
+						class={cn(
+							'ms-2 size-4 transition-transform',
+							expanded && '-rotate-180',
+						)}
+					/>
+				</Button>
+								{/snippet}
+				</Collapsible.Trigger>
 	</div>
 	<Collapsible.Content>
 		<Features.Root>
 			{#each [...features].splice(SHOW_BASE) as { title, icon, description }}
 				<Features.FeatureItem>
+					{@const SvelteComponent_2 = icon}
 					<div class="mb-4 flex flex-nowrap items-start gap-4">
-						<svelte:component
-							this={icon}
+						<SvelteComponent_2
 							class="h-8 w-8 flex-shrink-0 fill-primary"
 						/>
 						<Features.Term>{title}</Features.Term>

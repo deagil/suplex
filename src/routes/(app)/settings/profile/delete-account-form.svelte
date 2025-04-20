@@ -14,7 +14,11 @@
 		type DeleteAccountFormSchema,
 	} from './schema';
 
-	export let data: SuperValidated<Infer<DeleteAccountFormSchema>>;
+	interface Props {
+		data: SuperValidated<Infer<DeleteAccountFormSchema>>;
+	}
+
+	let { data }: Props = $props();
 
 	const form = superForm(data, {
 		validators: zodClient(deleteAccountFormSchema),
@@ -31,16 +35,18 @@
 	use:enhance
 >
 	<Form.Field {form} name="confirmation">
-		<Form.Control let:attrs>
-			<Form.Label>To confirm, please type in your password:</Form.Label>
-			<Input
-				{...attrs}
-				type="password"
-				required
-				disabled={$submitting}
-				bind:value={$formData.confirmation}
-			/>
-		</Form.Control>
+		<Form.Control>
+			{#snippet children({ props })}
+						<Form.Label>To confirm, please type in your password:</Form.Label>
+				<Input
+					{...props}
+					type="password"
+					required
+					disabled={$submitting}
+					bind:value={$formData.confirmation}
+				/>
+								{/snippet}
+				</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Dialog.Footer>
@@ -57,10 +63,12 @@
 				Delete Account
 			{/if}
 		</Form.Button>
-		<Dialog.Close asChild let:builder>
-			<Form.Button type="reset" variant="default" builders={[builder]}>
-				Cancel
-			</Form.Button>
-		</Dialog.Close>
+		<Dialog.Close>
+			{#snippet child({ props })}
+						<Form.Button type="reset" variant="default" {...props}>
+					Cancel
+				</Form.Button>
+								{/snippet}
+				</Dialog.Close>
 	</Dialog.Footer>
 </form>

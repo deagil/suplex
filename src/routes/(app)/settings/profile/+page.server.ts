@@ -67,7 +67,7 @@ export const actions = {
 
 		if (error) {
 			console.error(error);
-			return setError(form, '', 'Could not sign up. Please try again.');
+			return setError(form, 'email', error.message);
 		}
 
 		return message(form, {
@@ -99,7 +99,7 @@ export const actions = {
 
 		if (error) {
 			console.error('Error updating profile:', error.message);
-			return setError(form, '', 'Could not update info. Please try again.');
+			return setError(form, 'name', 'Could not update info. Please try again.');
 		}
 
 		return message(form, {

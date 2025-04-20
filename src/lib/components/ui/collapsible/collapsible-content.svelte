@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { Collapsible as CollapsiblePrimitive } from 'bits-ui';
-	import { slide } from 'svelte/transition';
-
+	
 	type $$Props = CollapsiblePrimitive.ContentProps;
 
-	export let transition: $$Props['transition'] = slide;
-	export let transitionConfig: $$Props['transitionConfig'] = {
-		duration: 150,
-	};
+	interface Props {
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { children, ...rest }: Props = $props();
 </script>
 
-<CollapsiblePrimitive.Content {transition} {transitionConfig} {...$$restProps}>
-	<slot />
+<CollapsiblePrimitive.Content {...rest}>
+	{@render children?.()}
 </CollapsiblePrimitive.Content>

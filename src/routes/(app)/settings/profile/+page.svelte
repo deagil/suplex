@@ -7,7 +7,7 @@
 	import EmailForm from './email-form.svelte';
 	import InfoForm from './info-form.svelte';
 
-	export let data;
+	let { data } = $props();
 </script>
 
 <svelte:head>
@@ -29,16 +29,18 @@
 	<Card.Content>
 		{#if data.deleteAccountForm}
 			<Dialog.Root>
-				<Dialog.Trigger asChild let:builder>
-					<Button
-						variant="destructive"
-						class="flex flex-nowrap items-center gap-2"
-						builders={[builder]}
-					>
-						<Trash class="h-4 w-4" />
-						Delete Account
-					</Button>
-				</Dialog.Trigger>
+				<Dialog.Trigger >
+					{#snippet child({ props })}
+										<Button
+							variant="destructive"
+							class="flex flex-nowrap items-center gap-2"
+							{...props}
+						>
+							<Trash class="h-4 w-4" />
+							Delete Account
+						</Button>
+														{/snippet}
+								</Dialog.Trigger>
 				<Dialog.Content class="border-destructive">
 					<Dialog.Header>
 						<Dialog.Title>Are you sure absolutely sure?</Dialog.Title>

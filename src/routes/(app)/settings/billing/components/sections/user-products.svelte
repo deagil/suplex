@@ -5,11 +5,15 @@
 	import { cn } from '$lib/utils';
 	import Stripe from 'stripe';
 
-	export let userProducts: {
-		stripe_product_id: string;
-		type: 'subscription' | 'payment';
-	}[];
-	export let products: Stripe.Product[];
+	interface Props {
+		userProducts: {
+			stripe_product_id: string;
+			type: 'subscription' | 'payment';
+		}[];
+		products: Stripe.Product[];
+	}
+
+	let { userProducts, products }: Props = $props();
 </script>
 
 <section class="flex flex-col gap-3">
@@ -25,7 +29,7 @@
 						<Card.Header
 							class="flex flex-row items-baseline justify-between gap-6"
 						>
-							<Card.Title tag="h4">
+							<Card.Title level={4}>
 								{#if product}
 									{product.name}
 								{:else}

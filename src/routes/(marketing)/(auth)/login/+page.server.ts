@@ -60,7 +60,7 @@ export const actions: Actions = {
 
 		if (error) {
 			console.error(error);
-			return setError(form, '', 'Invalid credentials');
+			return setError(form, 'password', 'Invalid credentials');
 		}
 
 		redirect(303, '/auth/callback?next=/dashboard');

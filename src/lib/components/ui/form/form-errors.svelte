@@ -3,15 +3,20 @@
 
 	import { cn } from '$lib/utils';
 
-	export let form: SuperForm<T>;
+	interface Props {
+		form: SuperForm<T>;
+		[key: string]: any;
+	}
 
-	$: ({ errors } = form);
+	let { form, ...props }: Props = $props();
+
+	let { errors } = props.$derived(form);
 </script>
 
 {#if $errors?._errors && $errors._errors.length > 0}
-	<div class={cn('text-sm font-medium text-destructive', $$props.class)}>
+	<div class={cn('text-sm font-medium text-destructive', props.class)}>
 		{#each $errors._errors as error}
-			<div class={cn('text-sm font-medium text-destructive', $$props.class)}>
+			<div class={cn('text-sm font-medium text-destructive', props.class)}>
 				{error}
 			</div>
 		{/each}
