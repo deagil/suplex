@@ -38,7 +38,7 @@
 			Continue with third-party service
 		</p>
 		<ul class="flex flex-wrap justify-center gap-4">
-			{#each oAuthProviders as provider}
+			{#each oAuthProviders as provider (provider)}
 				<li>
 					<Tooltip.Root>
 						{#await loadIcon(provider)}

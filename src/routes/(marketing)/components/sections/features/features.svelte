@@ -65,7 +65,7 @@
 
 <Collapsible.Root class="mx-auto max-w-screen-lg" bind:open={expanded}>
 	<Features.Root>
-		{#each [...features].splice(0, SHOW_BASE) as { title, icon, description, showcase }}
+		{#each [...features].splice(0, SHOW_BASE) as { title, icon, description, showcase }, i (i)}
 			<Features.FeatureItem
 				class="mb-4 flex min-h-80 flex-nowrap items-start gap-4"
 			>
@@ -115,7 +115,7 @@
 	</div>
 	<Collapsible.Content>
 		<Features.Root>
-			{#each [...features].splice(SHOW_BASE) as { title, icon, description }}
+			{#each [...features].splice(SHOW_BASE) as { title, icon, description }, i (i)}
 				<Features.FeatureItem>
 					{@const SvelteComponent_2 = icon}
 					<div class="mb-4 flex flex-nowrap items-start gap-4">

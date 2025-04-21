@@ -2,6 +2,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils.js';
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	type $$Props =
 		| {
 				src: string;

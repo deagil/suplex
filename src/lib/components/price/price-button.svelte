@@ -13,7 +13,7 @@
 		disabled?: boolean | null | undefined;
 		class?: string | null | undefined;
 		children?: import('svelte').Snippet;
-		[key: string]: any;
+		[key: string]: unknown;
 	}
 
 	let {

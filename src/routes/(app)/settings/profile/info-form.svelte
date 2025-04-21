@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import * as Form from '$lib/components/ui/form';
+	import FormErrors from '$lib/components/ui/form/form-errors.svelte';
 	import { Input } from '$lib/components/ui/input';
 	import {
 		superForm,
@@ -34,6 +35,7 @@
 			</Card.Description>
 		</Card.Header>
 		<Card.Content>
+			<FormErrors {form} />
 			<Form.Field {form} name="name">
 				<Form.Control>
 					{#snippet children({ props })}

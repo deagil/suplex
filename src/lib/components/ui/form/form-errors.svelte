@@ -5,17 +5,18 @@
 
 	interface Props {
 		form: SuperForm<T>;
-		[key: string]: any;
+		class?: string;
+		[key: string]: unknown;
 	}
 
 	let { form, ...props }: Props = $props();
 
-	let { errors } = props.$derived(form);
+	let { errors } = $derived(form);
 </script>
 
 {#if $errors?._errors && $errors._errors.length > 0}
 	<div class={cn('text-sm font-medium text-destructive', props.class)}>
-		{#each $errors._errors as error}
+		{#each $errors._errors as error, i (i)}
 			<div class={cn('text-sm font-medium text-destructive', props.class)}>
 				{error}
 			</div>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import * as Form from '$lib/components/ui/form';
+	import FormErrors from '$lib/components/ui/form/form-errors.svelte';
 	import { Input } from '$lib/components/ui/input';
 	import {
 		superForm,
@@ -32,6 +33,7 @@
 	use:enhance
 	class="grid gap-4"
 >
+	<FormErrors {form} />
 	<Form.Field {form} name="email">
 		<Form.Control>
 			{#snippet children({ props })}

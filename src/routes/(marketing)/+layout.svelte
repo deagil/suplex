@@ -35,7 +35,7 @@
 		<HomeButton />
 		<nav class="hidden sm:block">
 			<ul class="hidden flex-wrap px-1 text-lg font-bold sm:flex">
-				{#each Object.entries(menuItems) as [href, text]}
+				{#each Object.entries(menuItems) as [href, text] (href)}
 					<li class="md:mx-2">
 						<Button variant="ghost" {href} class="text-base text-foreground">
 							{text}
@@ -115,7 +115,7 @@
 					<Separator />
 					<nav class="[&_ul]:flex [&_ul]:flex-col [&_ul]:p-2">
 						<ul>
-							{#each Object.entries(menuItems) as [href, text]}
+							{#each Object.entries(menuItems) as [href, text] (href)}
 								<li>
 									<Button {href} variant="ghost" class="w-full py-6 text-base">
 										{text}
@@ -204,7 +204,7 @@
 				<div class="col">
 					<span class="footer-title">Menu</span>
 					<nav>
-						{#each Object.entries(menuItems) as [href, text]}
+						{#each Object.entries(menuItems) as [href, text] (href)}
 							<Button
 								{href}
 								variant="link"

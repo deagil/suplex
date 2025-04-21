@@ -60,8 +60,8 @@
 <section class="flex flex-col gap-3">
 	<h3 class="text-lg font-semibold">Default Prices</h3>
 	<ol class="grid gap-4 lg:grid-cols-3">
-		{#each withDefaultPrices as product}
-			{#each product.prices as price}
+		{#each withDefaultPrices as product (product.id)}
+			{#each product.prices as price (price.id)}
 				{@const isFree = price.unit_amount === 0}
 				{@const isCurrent =
 					currentSubscriptionsPrices.findIndex((p) => p.id === price.id) > -1 ||

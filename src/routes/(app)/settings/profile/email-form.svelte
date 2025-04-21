@@ -2,6 +2,7 @@
 	import * as Alert from '$lib/components/ui/alert';
 	import * as Card from '$lib/components/ui/card';
 	import * as Form from '$lib/components/ui/form';
+	import FormErrors from '$lib/components/ui/form/form-errors.svelte';
 	import { Input } from '$lib/components/ui/input';
 	import type { User } from '@supabase/supabase-js';
 	import {
@@ -39,6 +40,7 @@
 			</Card.Description>
 		</Card.Header>
 		<Card.Content>
+			<FormErrors {form} />
 			<Form.Field {form} name="email">
 				<Form.Control>
 					{#snippet children({ props })}

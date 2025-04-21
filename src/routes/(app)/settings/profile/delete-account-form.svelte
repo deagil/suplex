@@ -13,6 +13,7 @@
 		deleteAccountFormSchema,
 		type DeleteAccountFormSchema,
 	} from './schema';
+	import FormErrors from '$lib/components/ui/form/form-errors.svelte';
 
 	interface Props {
 		data: SuperValidated<Infer<DeleteAccountFormSchema>>;
@@ -34,6 +35,7 @@
 	action="?/deleteAccount"
 	use:enhance
 >
+	<FormErrors {form} />
 	<Form.Field {form} name="confirmation">
 		<Form.Control>
 			{#snippet children({ props })}

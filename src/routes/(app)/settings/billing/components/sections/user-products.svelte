@@ -19,7 +19,7 @@
 <section class="flex flex-col gap-3">
 	<h3 class="text-lg font-semibold">Your products</h3>
 	<ol class="grid grid-cols-1 gap-4">
-		{#each userProducts as { stripe_product_id, type }}
+		{#each userProducts as { stripe_product_id, type } (stripe_product_id)}
 			{@const product = products.find(
 				(product) => product.id === stripe_product_id,
 			)}
