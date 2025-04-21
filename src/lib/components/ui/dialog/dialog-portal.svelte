@@ -6,6 +6,7 @@
 	}
 
 	let { children, ...rest }: Props = $props();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	type $$Props = DialogPrimitive.PortalProps;
 </script>
 

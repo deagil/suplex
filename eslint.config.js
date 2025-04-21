@@ -36,13 +36,14 @@ export default [
 		plugins: {
 			'@typescript-eslint': ts.plugin,
 		},
-		files: ['src/lib/components/landing/**/*.svelte'],
+		files: ['src/lib/components/**/*.svelte'],
 		rules: {
-			'@typescript-eslint/no-explicityly-any': 'off',
+			'@typescript-eslint/no-explicit-any': 'off',
 			'@typescript-eslint/no-unused-vars': [
 				'warn',
 				{
 					argsIgnorePattern: '^_',
+					varsIgnorePattern: '\\$\\$Props',
 				},
 			],
 		},

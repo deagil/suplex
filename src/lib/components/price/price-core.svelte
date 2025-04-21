@@ -1,4 +1,4 @@
-<script lang="ts" generics="T">
+<script lang="ts">
 	import Stripe from 'stripe';
 
 	interface Props {

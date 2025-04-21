@@ -2,7 +2,8 @@
 	import { cn } from '$lib/utils.js';
 	interface Props {
 		children?: import('svelte').Snippet;
-		[key: string]: any;
+		class?: string;
+		[key: string]: unknown;
 	}
 
 	let { ...props }: Props = $props();
