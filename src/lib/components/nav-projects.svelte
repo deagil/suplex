@@ -1,11 +1,11 @@
 <script lang="ts">
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
-	import * as Sidebar from "$lib/components/ui/sidebar/index.js";
-	import { useSidebar } from "$lib/components/ui/sidebar/index.js";
-	import Ellipsis from "@lucide/svelte/icons/ellipsis";
-	import Folder from "@lucide/svelte/icons/folder";
-	import Share from "@lucide/svelte/icons/share";
-	import Trash2 from "@lucide/svelte/icons/trash-2";
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+	import { useSidebar } from '$lib/components/ui/sidebar/index.js';
+	import Ellipsis from '@lucide/svelte/icons/ellipsis';
+	import Folder from '@lucide/svelte/icons/folder';
+	import Share from '@lucide/svelte/icons/share';
+	import Trash2 from '@lucide/svelte/icons/trash-2';
 
 	let {
 		projects,
@@ -23,7 +23,7 @@
 </script>
 
 <Sidebar.Group class="group-data-[collapsible=icon]:hidden">
-	<Sidebar.GroupLabel>Projects</Sidebar.GroupLabel>
+	<Sidebar.GroupLabel>Tools</Sidebar.GroupLabel>
 	<Sidebar.Menu>
 		{#each projects as item (item.name)}
 			<Sidebar.MenuItem>
@@ -46,8 +46,8 @@
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content
 						class="w-48"
-						side={sidebar.isMobile ? "bottom" : "right"}
-						align={sidebar.isMobile ? "end" : "start"}
+						side={sidebar.isMobile ? 'bottom' : 'right'}
+						align={sidebar.isMobile ? 'end' : 'start'}
 					>
 						<DropdownMenu.Item>
 							<Folder class="text-muted-foreground" />

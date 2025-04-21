@@ -1,74 +1,83 @@
+export const csr = false;
+
+import { redirect, error } from '@sveltejs/kit';
+import { ok, safeTry } from 'neverthrow';
+import {
+	createDataStreamResponse,
+	streamText,
+	smoothStream,
+} from 'ai';
 import { myProvider } from '$lib/server/ai/models';
 import { systemPrompt } from '$lib/server/ai/prompts.js';
 import { generateTitleFromUserMessage } from '$lib/server/ai/utils';
-import { deleteChatById, getChatById, saveChat, saveMessages } from '$lib/server/db/queries.js';
-import type { Chat } from '$lib/server/db/schema';
-import { getMostRecentUserMessage, getTrailingMessageId } from '$lib/utils/chat.js';
-import { allowAnonymousChats } from '$lib/utils/constants.js';
-import { error } from '@sveltejs/kit';
 import {
-	appendResponseMessages,
-	createDataStreamResponse,
-	smoothStream,
-	streamText,
-	type UIMessage
-} from 'ai';
-import { ok, safeTry } from 'neverthrow';
+	getChatById,
+	saveChat,
+	saveMessages,
+	deleteChatById,
+} from '$lib/server/ai/chat_queries';
+import {
+	getMostRecentUserMessage,
+	getTrailingMessageId,
+} from '$lib/utils/chat';
+import type { UIMessage } from 'ai';
 
-export async function POST({ request, locals: { user }, cookies }) {
-	// TODO: zod?
+export async function POST({ request, locals, cookies }) {
+	// Fetch the current user from the session
+	const { safeGetSession, supabase } = locals;
+	const { user } = await safeGetSession();
+	if (!user) return redirect(303, '/login');
+
 	const { id, messages }: { id: string; messages: UIMessage[] } = await request.json();
 	const selectedChatModel = cookies.get('selected-model');
-
-	if (!user && !allowAnonymousChats) {
-		error(401, 'Unauthorized');
-	}
-
 	if (!selectedChatModel) {
 		error(400, 'No chat model selected');
 	}
 
 	const userMessage = getMostRecentUserMessage(messages);
-
 	if (!userMessage) {
 		error(400, 'No user message found');
 	}
 
-	if (user) {
-		await safeTry(async function* () {
-			let chat: Chat;
-			const chatResult = await getChatById({ id });
-			if (chatResult.isErr()) {
-				if (chatResult.error._tag !== 'DbEntityNotFoundError') {
-					return chatResult;
-				}
-				const title = yield* generateTitleFromUserMessage({ message: userMessage });
-				chat = yield* saveChat({ id, userId: user.id, title });
+	// For authenticated users, attempt to fetch (or create) their chat, then save the message.
+	await safeTry(async function* () {
+		let chat;
+		try {
+			chat = await getChatById({ supabaseClient: supabase, id });
+			yield;
+		} catch (e: { message: string }) {
+			// If not found, assume DbEntityNotFoundError and create new chat.
+			if (e.message.includes('No rows')) {
+				const titleResult = await generateTitleFromUserMessage({ message: userMessage });
+				const title = titleResult.unwrapOr('New Chat');
+				chat = await saveChat({ supabaseClient: supabase, id, userId: user.id, title });
 			} else {
-				chat = chatResult.value;
+				throw e;
 			}
+		}
 
-			if (chat.userId !== user.id) {
-				error(403, 'Forbidden');
-			}
+		if (chat.user_id !== user.id) {
+			error(403, 'Forbidden');
+		}
 
-			yield* saveMessages({
-				messages: [
-					{
-						chatId: id,
-						id: userMessage.id,
-						role: 'user',
-						parts: userMessage.parts,
-						attachments: userMessage.experimental_attachments ?? [],
-						createdAt: new Date()
-					}
-				]
-			});
+		await saveMessages({
+			supabaseClient: supabase,
+			messages: [
+				{
+					chat_id: id,
+					id: userMessage.id,
+					role: 'user',
+					parts: userMessage.parts,
+					attachments: userMessage.experimental_attachments ?? [],
+					created_at: new Date().toISOString(),
+				},
+			],
+		});
 
-			return ok(undefined);
-		}).orElse(() => error(500, 'An error occurred while processing your request'));
-	}
+		return ok(undefined);
+	}).orElse(() => error(500, 'An error occurred while processing your request'));
 
+	// Return a data stream response using your language model provider.
 	return createDataStreamResponse({
 		execute: (dataStream) => {
 			const result = streamText({
@@ -77,85 +86,64 @@ export async function POST({ request, locals: { user }, cookies }) {
 				messages,
 				maxSteps: 5,
 				experimental_activeTools: [],
-				// TODO
-				// selectedChatModel === 'chat-model-reasoning'
-				// 	? []
-				// 	: ['getWeather', 'createDocument', 'updateDocument', 'requestSuggestions'],
 				experimental_transform: smoothStream({ chunking: 'word' }),
 				experimental_generateMessageId: crypto.randomUUID.bind(crypto),
-				// TODO
-				// tools: {
-				// 	getWeather,
-				// 	createDocument: createDocument({ session, dataStream }),
-				// 	updateDocument: updateDocument({ session, dataStream }),
-				// 	requestSuggestions: requestSuggestions({
-				// 		session,
-				// 		dataStream
-				// 	})
-				// },
 				onFinish: async ({ response }) => {
 					if (!user) return;
 					const assistantId = getTrailingMessageId({
-						messages: response.messages.filter((message) => message.role === 'assistant')
+						messages: response.messages.filter((message) => message.role === 'assistant'),
 					});
 
 					if (!assistantId) {
 						throw new Error('No assistant message found!');
 					}
 
-					const [, assistantMessage] = appendResponseMessages({
-						messages: [userMessage],
-						responseMessages: response.messages
-					});
-
+					// Append assistant message and save it.
 					await saveMessages({
+						supabaseClient: supabase,
 						messages: [
 							{
 								id: assistantId,
 								chatId: id,
-								role: assistantMessage.role,
-								parts: assistantMessage.parts,
-								attachments: assistantMessage.experimental_attachments ?? [],
-								createdAt: new Date()
-							}
-						]
+								role: 'assistant',
+								parts: response.messages.find((msg) => msg.id === assistantId)?.parts,
+								attachments:
+									response.messages.find((msg) => msg.id === assistantId)?.experimental_attachments ?? [],
+								created_at: new Date().toISOString(),
+							},
+						],
 					});
 				},
 				experimental_telemetry: {
 					isEnabled: true,
-					functionId: 'stream-text'
-				}
+					functionId: 'stream-text',
+				},
 			});
 
 			result.consumeStream();
-
-			result.mergeIntoDataStream(dataStream, {
-				sendReasoning: true
-			});
+			result.mergeIntoDataStream(dataStream, { sendReasoning: true });
 		},
 		onError: (e) => {
 			console.error(e);
 			return 'Oops!';
-		}
+		},
 	});
 }
 
-export async function DELETE({ locals: { user }, request }) {
-	// TODO: zod
-	const { id }: { id: string } = await request.json();
-	if (!user) {
-		error(401, 'Unauthorized');
-	}
+export async function DELETE({ request, locals }) {
+	const { safeGetSession, supabase } = locals;
+	const { user } = await safeGetSession();
+	if (!user) return redirect(303, '/login');
 
-	return await getChatById({ id })
-		.andTee((chat) => {
-			if (chat.userId !== user.id) {
-				error(403, 'Forbidden');
+	const { id }: { id: string } = await request.json();
+
+	return await getChatById({ supabaseClient: supabase, id })
+		.then((chat) => {
+			if (chat.user_id !== user.id) {
+				throw error(403, 'Forbidden');
 			}
+			return deleteChatById({ supabaseClient: supabase, id });
 		})
-		.andThen(deleteChatById)
-		.match(
-			() => new Response('Chat deleted', { status: 200 }),
-			() => error(500, 'An error occurred while processing your request')
-		);
+		.then(() => new Response('Chat deleted', { status: 200 }))
+		.catch((err) => error(500, 'An error occurred while processing your request'));
 }

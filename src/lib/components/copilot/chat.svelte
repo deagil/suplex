@@ -9,6 +9,7 @@
 	import MultimodalInput from './multimodal-input.svelte';
 	import { untrack } from 'svelte';
 	import type { UIMessage } from '@ai-sdk/svelte';
+	import { toast } from 'svelte-sonner';
 
 	// Replace these with your own types if necessary.
 	let {
@@ -37,7 +38,7 @@
 			onError: (error) => {
 				try {
 					const jsonError = JSON.parse(error.message);
-					console.error(
+					toast.error(
 						typeof jsonError === 'object' &&
 							jsonError !== null &&
 							'message' in jsonError
@@ -45,7 +46,7 @@
 							: error.message,
 					);
 				} catch {
-					console.error(error.message);
+					toast.error(error.message);
 				}
 			},
 		}),

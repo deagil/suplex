@@ -1,13 +1,16 @@
 <script lang="ts" module>
-	import BookOpen from '@lucide/svelte/icons/book-open';
 	import Bot from '@lucide/svelte/icons/bot';
 	import ChartPie from '@lucide/svelte/icons/chart-pie';
-	import Frame from '@lucide/svelte/icons/frame';
+	import Construction from '@lucide/svelte/icons/construction';
+	import Shapes from '@lucide/svelte/icons/shapes';
 	import LifeBuoy from '@lucide/svelte/icons/life-buoy';
 	import Map from '@lucide/svelte/icons/map';
+	import FileText from '@lucide/svelte/icons/file-text';
 	import Send from '@lucide/svelte/icons/send';
 	import Settings2 from '@lucide/svelte/icons/settings-2';
-	import SquareTerminal from '@lucide/svelte/icons/square-terminal';
+	import Sparkles from './icons/sparkles.svelte';
+	import MessagesSquare from '@lucide/svelte/icons/messages-square';
+	import Database from '@lucide/svelte/icons/database';
 
 	const data = {
 		user: {
@@ -17,63 +20,107 @@
 		},
 		navMain: [
 			{
-				title: 'Playground',
+				title: 'Activity',
+				url: '/activity',
+				icon: MessagesSquare,
+				isActive: true,
+			},
+			{
+				title: 'Data',
 				url: '#',
-				icon: SquareTerminal,
+				icon: Database,
 				isActive: true,
 				items: [
 					{
-						title: 'History',
+						title: 'Tables',
+						url: '/data/tables',
+					},
+					{
+						title: 'Forms',
 						url: '#',
 					},
 					{
-						title: 'Starred',
-						url: '#',
-					},
-					{
-						title: 'Settings',
+						title: 'Parameters',
 						url: '#',
 					},
 				],
 			},
 			{
-				title: 'Models',
+				title: 'Automation',
 				url: '#',
 				icon: Bot,
 				items: [
 					{
-						title: 'Genesis',
+						title: 'Hooks',
 						url: '#',
 					},
 					{
-						title: 'Explorer',
+						title: 'Functions',
 						url: '#',
 					},
 					{
-						title: 'Quantum',
+						title: 'Workflows',
 						url: '#',
 					},
 				],
 			},
 			{
-				title: 'Documentation',
+				title: 'AI',
 				url: '#',
-				icon: BookOpen,
+				icon: Sparkles,
 				items: [
 					{
-						title: 'Introduction',
+						title: 'Agents',
 						url: '#',
 					},
 					{
-						title: 'Get Started',
+						title: 'Models',
 						url: '#',
 					},
 					{
-						title: 'Tutorials',
+						title: 'Usage',
+						url: '#',
+					},
+				],
+			},
+			{
+				title: 'Access',
+				url: '#',
+				icon: Construction,
+				items: [
+					{
+						title: 'Teams',
 						url: '#',
 					},
 					{
-						title: 'Changelog',
+						title: 'Roles',
+						url: '#',
+					},
+					{
+						title: 'Policies',
+						url: '#',
+					},
+				],
+			},
+			{
+				title: 'Integrations',
+				url: '#',
+				icon: Shapes,
+				items: [
+					{
+						title: 'Supabase',
+						url: '#',
+					},
+					{
+						title: 'Tally Forms',
+						url: '#',
+					},
+					{
+						title: 'Zapier',
+						url: '#',
+					},
+					{
+						title: 'OpenAI',
 						url: '#',
 					},
 				],
@@ -84,7 +131,7 @@
 				icon: Settings2,
 				items: [
 					{
-						title: 'General',
+						title: 'Profile',
 						url: '#',
 					},
 					{
@@ -96,7 +143,7 @@
 						url: '#',
 					},
 					{
-						title: 'Limits',
+						title: 'Security',
 						url: '#',
 					},
 				],
@@ -116,12 +163,12 @@
 		],
 		projects: [
 			{
-				name: 'Design Engineering',
+				name: 'Email Templates',
 				url: '#',
-				icon: Frame,
+				icon: FileText,
 			},
 			{
-				name: 'Sales & Marketing',
+				name: 'Reports',
 				url: '#',
 				icon: ChartPie,
 			},

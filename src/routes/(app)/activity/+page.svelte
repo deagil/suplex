@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Dashboard</title>
+	<title>Activity</title>
 </svelte:head>
 
 <Card.Root>
