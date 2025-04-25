@@ -1,0 +1,232 @@
+-- CREATE TABLE "teams"(
+--     "id" uuid NOT NULL DEFAULT gen_random_uuid(),
+--     "metadata" jsonb NOT NULL DEFAULT '{}' ::jsonb,
+--     "created_at" timestamp with time zone NOT NULL DEFAULT now(),
+--     "updated_at" timestamp with time zone NOT NULL DEFAULT now()
+-- );
+-- CREATE TABLE "team_members"(
+--     "id" uuid NOT NULL DEFAULT gen_random_uuid(),
+--     "team_id" uuid NOT NULL,
+--     "user_id" uuid NOT NULL,
+--     "role" text NOT NULL DEFAULT ''::text,
+--     "metadata" jsonb NOT NULL DEFAULT '{}' ::jsonb,
+--     "created_at" timestamp with time zone NOT NULL DEFAULT now(),
+--     "updated_at" timestamp with time zone NOT NULL DEFAULT now()
+-- );
+-- CREATE TABLE "team_invites"(
+--     "id" uuid NOT NULL DEFAULT gen_random_uuid(),
+--     "team_id" uuid NOT NULL,
+--     "roles" text[] NOT NULL DEFAULT '{}' ::text[] CHECK (cardinality(roles) > 0),
+--     "invited_by" uuid NOT NULL,
+--     "created_at" timestamp with time zone NOT NULL DEFAULT now(),
+--     "user_id" uuid,
+--     "accepted_at" timestamp with time zone
+-- );
+-- CREATE UNIQUE INDEX team_pkey ON "teams" USING btree(id);
+-- CREATE UNIQUE INDEX team_members_team_id_idx ON team_members USING btree(team_id, user_id, ROLE);
+-- CREATE UNIQUE INDEX team_members_pkey ON team_members USING btree(id);
+-- CREATE UNIQUE INDEX team_invites_pkey ON team_invites USING btree(id);
+-- ALTER TABLE "teams"
+--     ADD CONSTRAINT "team_pkey" PRIMARY KEY USING INDEX "team_pkey";
+-- ALTER TABLE "team_members"
+--     ADD CONSTRAINT "team_members_pkey" PRIMARY KEY USING INDEX "team_members_pkey";
+-- ALTER TABLE "team_members"
+--     ADD CONSTRAINT "team_members_team_id_fkey" FOREIGN KEY (team_id) REFERENCES "teams"(id) NOT valid;
+-- ALTER TABLE "team_members" validate CONSTRAINT "team_members_team_id_fkey";
+-- ALTER TABLE "team_members"
+--     ADD CONSTRAINT "team_members_user_id_fkey" FOREIGN KEY (user_id) REFERENCES auth.users(id) NOT valid;
+-- ALTER TABLE "team_members" validate CONSTRAINT "team_members_user_id_fkey";
+-- ALTER TABLE "team_invites"
+--     ADD CONSTRAINT "team_invites_pkey" PRIMARY KEY USING INDEX "team_invites_pkey";
+-- ALTER TABLE "team_invites"
+--     ADD CONSTRAINT "team_invites_invited_by_fkey" FOREIGN KEY ("invited_by") REFERENCES auth.users(id) NOT valid;
+-- ALTER TABLE "team_invites" validate CONSTRAINT "team_invites_invited_by_fkey";
+-- ALTER TABLE "team_invites"
+--     ADD CONSTRAINT "team_invites_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES teams(id) NOT valid;
+-- ALTER TABLE "team_invites" validate CONSTRAINT "team_invites_team_id_fkey";
+-- ALTER TABLE "team_invites"
+--     ADD CONSTRAINT "team_invites_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES auth.users(id) NOT valid;
+-- ALTER TABLE "team_invites" validate CONSTRAINT "team_invites_user_id_fkey";
+-- ALTER TABLE "team_invites" ENABLE ROW LEVEL SECURITY;
+-- CREATE OR REPLACE FUNCTION @extschema@.db_pre_request()
+--     RETURNS void
+--     LANGUAGE plpgsql
+--     STABLE
+--     SECURITY DEFINER
+--     SET search_path = @extschema@
+--     AS $function$
+-- DECLARE
+--     teams jsonb;
+-- BEGIN
+--     -- get current teams from auth.users
+--     SELECT
+--         raw_app_meta_data -> 'teams'
+--     FROM
+--         auth.users INTO teams
+--     WHERE
+--         id = auth.uid();
+--     -- store it in the request object
+--     PERFORM
+--         set_config('request.teams'::text, teams::text, FALSE /* applies to transaction if true, session if false */);
+-- END;
+-- $function$;
+-- CREATE OR REPLACE FUNCTION @extschema@.get_user_claims()
+--     RETURNS jsonb
+--     LANGUAGE sql
+--     STABLE
+--     SET search_path = @extschema@
+--     AS $function$
+--     SELECT
+--         coalesce(current_setting('request.teams', TRUE)::jsonb, auth.jwt() -> 'app_metadata' -> 'teams')::jsonb
+-- $function$;
+-- CREATE OR REPLACE FUNCTION @extschema@.user_has_team_role(team_id uuid, team_role text)
+--     RETURNS boolean
+--     LANGUAGE plpgsql
+--     STABLE
+--     SET search_path = @extschema@
+--     AS $function$
+-- DECLARE
+--     auth_role text = auth.role();
+--     retval bool;
+-- BEGIN
+--     IF auth_role = 'authenticated' THEN
+--         IF jwt_is_expired() THEN
+--             RAISE EXCEPTION 'invalid_jwt'
+--                 USING hint = 'jwt is expired or missing';
+--             END IF;
+--             SELECT
+--                 coalesce(get_user_claims() -> team_id::text ? team_role, FALSE) INTO retval;
+--             RETURN retval;
+--         ELSIF auth_role = 'anon' THEN
+--             RETURN FALSE;
+--         ELSE
+--             -- not a user session, probably being called from a trigger or something
+--             IF SESSION_USER = 'postgres' THEN
+--                 RETURN TRUE;
+--             ELSE
+--                 -- such as 'authenticator'
+--                 RETURN FALSE;
+--             END IF;
+--         END IF;
+-- END;
+-- $function$;
+-- CREATE OR REPLACE FUNCTION @extschema@.user_is_team_member(team_id uuid)
+--     RETURNS boolean
+--     LANGUAGE plpgsql
+--     STABLE
+--     SET search_path = @extschema@
+--     AS $function$
+-- DECLARE
+--     auth_role text = auth.role();
+--     retval bool;
+-- BEGIN
+--     IF auth_role = 'authenticated' THEN
+--         IF jwt_is_expired() THEN
+--             RAISE EXCEPTION 'invalid_jwt'
+--                 USING hint = 'jwt is expired or missing';
+--             END IF;
+--             SELECT
+--                 coalesce(get_user_claims() ? team_id::text, FALSE) INTO retval;
+--             RETURN retval;
+--         ELSIF auth_role = 'anon' THEN
+--             RETURN FALSE;
+--         ELSE
+--             -- not a user session, probably being called from a trigger or something
+--             IF SESSION_USER = 'postgres' THEN
+--                 RETURN TRUE;
+--             ELSE
+--                 -- such as 'authenticator'
+--                 RETURN FALSE;
+--             END IF;
+--         END IF;
+-- END;
+-- $function$;
+-- CREATE OR REPLACE FUNCTION @extschema@.jwt_is_expired()
+--     RETURNS boolean
+--     LANGUAGE plpgsql
+--     STABLE
+--     SET search_path = @extschema@
+--     AS $function$
+-- BEGIN
+--     RETURN extract(epoch FROM now()) > coalesce(auth.jwt() ->> 'exp', '0')::numeric;
+-- END;
+-- $function$;
+-- CREATE OR REPLACE FUNCTION @extschema@.update_user_roles()
+--     RETURNS TRIGGER
+--     LANGUAGE plpgsql
+--     SECURITY DEFINER
+--     SET search_path TO @extschema@
+--     AS $function$
+-- DECLARE
+--     _team_id text = COALESCE(NEW.team_id, OLD.team_id)::text;
+--     _team_id_old text = COALESCE(OLD.team_id, NEW.team_id)::text;
+--     _user_id uuid = COALESCE(NEW.user_id, OLD.user_id);
+--     _user_id_old uuid = COALESCE(OLD.user_id, NEW.user_id);
+--     _role text = COALESCE(NEW.role, OLD.role);
+--     _role_old text = COALESCE(OLD.role, NEW.role);
+--     _raw_app_meta_data jsonb;
+-- BEGIN
+--     -- Check if user_id or team_id is changed
+--     IF _team_id IS DISTINCT FROM _team_id_old OR _user_id IS DISTINCT FROM _user_id_old THEN
+--         RAISE EXCEPTION 'Changing user_id or team_id is not allowed';
+--     END IF;
+--     -- Fetch current raw_app_meta_data
+--     SELECT
+--         raw_app_meta_data INTO _raw_app_meta_data
+--     FROM
+--         auth.users
+--     WHERE
+--         id = _user_id;
+--     _raw_app_meta_data = coalesce(_raw_app_meta_data, '{}'::jsonb);
+--     -- Check if the record has been deleted or the role has been changed
+--     IF (TG_OP = 'DELETE') OR (TG_OP = 'UPDATE' AND _role IS DISTINCT FROM _role_old) THEN
+--         -- Remove role from raw_app_meta_data
+--         _raw_app_meta_data = jsonb_set(_raw_app_meta_data, '{teams}', jsonb_strip_nulls(COALESCE(_raw_app_meta_data -> 'teams', '{}'::jsonb) || jsonb_build_object(_team_id::text,(
+--                         SELECT
+--                             jsonb_agg(val)
+--                         FROM jsonb_array_elements_text(COALESCE(_raw_app_meta_data -> 'teams' ->(_team_id::text), '[]'::jsonb)) AS vals(val)
+--                         WHERE
+--                             val <> _role_old))));
+--     END IF;
+--     -- Check if the record has been inserted or the role has been changed
+--     IF (TG_OP = 'INSERT') OR (TG_OP = 'UPDATE' AND _role IS DISTINCT FROM _role_old) THEN
+--         -- Add role to raw_app_meta_data
+--         _raw_app_meta_data = jsonb_set(_raw_app_meta_data, '{teams}', COALESCE(_raw_app_meta_data -> 'teams', '{}'::jsonb) || jsonb_build_object(_team_id::text,(
+--                     SELECT
+--                         jsonb_agg(DISTINCT val)
+--                     FROM (
+--                         SELECT
+--                             val
+--                         FROM jsonb_array_elements_text(COALESCE(_raw_app_meta_data -> 'teams' ->(_team_id::text), '[]'::jsonb)) AS vals(val)
+--                 UNION
+--                 SELECT
+--                     _role) AS combined_roles(val))));
+--     END IF;
+--     -- Update raw_app_meta_data in auth.users
+--     UPDATE
+--         auth.users
+--     SET
+--         raw_app_meta_data = _raw_app_meta_data
+--     WHERE
+--         id = _user_id;
+--     -- Passthrough new record (the trigger function requires a return value)
+--     RETURN NEW;
+-- END;
+-- $function$;
+-- -- Enable the db_pre_request hook for the authenticator role
+-- ALTER ROLE authenticator SET pgrst.db_pre_request TO 'db_pre_request';
+-- NOTIFY pgrst,
+-- 'reload config';
+-- CREATE TRIGGER handle_updated_at
+--     BEFORE UPDATE ON @extschema@.teams FOR EACH ROW
+--     EXECUTE FUNCTION moddatetime('updated_at');
+-- CREATE TRIGGER handle_updated_at
+--     BEFORE UPDATE ON @extschema@.team_members FOR EACH ROW
+--     EXECUTE FUNCTION moddatetime('updated_at');
+-- CREATE TRIGGER on_change_update_user_metadata
+--     AFTER INSERT OR DELETE OR UPDATE ON team_members
+--     FOR EACH ROW
+--     EXECUTE FUNCTION update_user_roles();
+-- ALTER TABLE "team_members" ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE "teams" ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE "team_invites" ENABLE ROW LEVEL SECURITY;

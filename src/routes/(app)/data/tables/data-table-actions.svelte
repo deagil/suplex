@@ -1,30 +1,28 @@
 <script lang="ts">
 	import Ellipsis from '@lucide/svelte/icons/ellipsis';
+	import { toast } from 'svelte-sonner';
 	import { Wrench, Clipboard } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 
 	let { id }: { id: string } = $props();
+
+	function handleCopy(id: string) {
+		navigator.clipboard.writeText(id);
+		toast(`Copied ID ${id} to clipboard`);
+	}
 </script>
 
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger>
-		{#snippet child({ props })}
-			<Button
-				{...props}
-				variant="ghost"
-				size="icon"
-				class="relative size-8 p-0"
-			>
-				<span class="sr-only">Open menu</span>
-				<Ellipsis />
-			</Button>
-		{/snippet}
+		<Button variant="outline" class="">
+			<Ellipsis />
+		</Button>
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content>
 		<DropdownMenu.Group>
 			<DropdownMenu.GroupHeading>Actions</DropdownMenu.GroupHeading>
-			<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(id)}>
+			<DropdownMenu.Item onclick={() => handleCopy(id)}>
 				<Clipboard />
 				Copy record ID
 			</DropdownMenu.Item>

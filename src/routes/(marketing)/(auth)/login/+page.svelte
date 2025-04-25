@@ -56,7 +56,8 @@
 		</Card.Title>
 	</Card.Header>
 	<Card.Content class="flex flex-col gap-4">
-		<SocialsAuth />
+		<!-- TODO -->
+		<!-- <SocialsAuth /> -->
 
 		<div class="flex flex-col gap-3">
 			<p class="text-sm text-muted-foreground">
