@@ -1,7 +1,5 @@
 <script lang="ts" generics="TData, TValue">
-	// This Svelte component renders a data table with pagination, sorting, and filtering capabilities.
 	import {
-		// Importing types for column definitions, pagination state, sorting state, column filters state, and visibility state from the table-core library.
 		type ColumnDef,
 		type PaginationState,
 		type SortingState,
@@ -13,132 +11,113 @@
 		getFilteredRowModel,
 	} from '@tanstack/table-core';
 	import {
-		// Importing functions to create a Svelte table and a render component for table cells.
 		createSvelteTable,
 		FlexRender,
 	} from '$lib/components/ui/data-table/index.js';
-	import * as Table from '$lib/components/ui/table/index.js'; // Importing table components.
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js'; // Importing dropdown menu components.
-	import Button from '$lib/components/ui/button/button.svelte'; // Importing button component.
-	import Input from '$lib/components/ui/input/input.svelte'; // Importing input component for filtering.
+	import * as Table from '$lib/components/ui/table/index.js';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import Input from '$lib/components/ui/input/input.svelte';
 
-	// Type definition for the properties of the DataTable component, including columns and data.
-	type DataTableProps<TData, TValue> = {
+	const {
+		columns,
+		data,
+		filterColumns = [],
+		onRowClick = null,
+		rowActions = null,
+	} = $props<{
 		columns: ColumnDef<TData, TValue>[];
 		data: TData[];
-	};
+		filterColumns?: string[];
+		onRowClick?: ((row: TData) => void) | null;
+		rowActions?: ((row: TData) => any) | null;
+	}>();
 
-	// Destructuring props to get columns and data for the table.
-	let { columns, data }: DataTableProps<TData, TValue> = $props();
+	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
+	let sorting = $state<SortingState>([]);
+	let columnFilters = $state<ColumnFiltersState>([]);
+	let columnVisibility = $state<VisibilityState>({});
 
-	// State management variables for pagination, sorting, column filters, and column visibility.
-	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 }); // Initial pagination state.
-	let sorting = $state<SortingState>([]); // Initial sorting state.
-	let columnFilters = $state<ColumnFiltersState>([]); // Initial column filters state.
-	let columnVisibility = $state<VisibilityState>({}); // Initial column visibility state.
-
-	// Creating the Svelte table with configuration for data, columns, and state management.
 	const table = createSvelteTable({
 		get data() {
-			return data; // Getter for the table data.
+			return data;
 		},
-		columns, // Columns configuration.
-		getCoreRowModel: getCoreRowModel(), // Core row model for data handling.
-		getPaginationRowModel: getPaginationRowModel(), // Pagination row model for handling pagination.
-		getSortedRowModel: getSortedRowModel(), // Sorted row model for handling sorting.
-		getFilteredRowModel: getFilteredRowModel(), // Filtered row model for handling filtering.
+		columns,
+		getCoreRowModel: getCoreRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
 		onPaginationChange: (updater) => {
-			// Handler for pagination changes.
-			if (typeof updater === 'function') {
-				pagination = updater(pagination); // Update pagination state if updater is a function.
-			} else {
-				pagination = updater; // Directly set pagination state if updater is not a function.
-			}
+			pagination =
+				typeof updater === 'function' ? updater(pagination) : updater;
 		},
 		onSortingChange: (updater) => {
-			// Handler for sorting changes.
-			if (typeof updater === 'function') {
-				sorting = updater(sorting); // Update sorting state if updater is a function.
-			} else {
-				sorting = updater; // Directly set sorting state if updater is not a function.
-			}
+			sorting = typeof updater === 'function' ? updater(sorting) : updater;
 		},
 		onColumnFiltersChange: (updater) => {
-			// Handler for column filter changes.
-			if (typeof updater === 'function') {
-				columnFilters = updater(columnFilters); // Update column filters state if updater is a function.
-			} else {
-				columnFilters = updater; // Directly set column filters state if updater is not a function.
-			}
+			columnFilters =
+				typeof updater === 'function' ? updater(columnFilters) : updater;
 		},
 		onColumnVisibilityChange: (updater) => {
-			// Handler for column visibility changes.
-			if (typeof updater === 'function') {
-				columnVisibility = updater(columnVisibility); // Update column visibility state if updater is a function.
-			} else {
-				columnVisibility = updater; // Directly set column visibility state if updater is not a function.
-			}
+			columnVisibility =
+				typeof updater === 'function' ? updater(columnVisibility) : updater;
 		},
 		state: {
-			// Exposing state variables for pagination, sorting, column filters, and visibility.
 			get pagination() {
-				return pagination; // Getter for pagination state.
+				return pagination;
 			},
 			get sorting() {
-				return sorting; // Getter for sorting state.
+				return sorting;
 			},
 			get columnFilters() {
-				return columnFilters; // Getter for column filters state.
+				return columnFilters;
 			},
 			get columnVisibility() {
-				return columnVisibility; // Getter for column visibility state.
+				return columnVisibility;
 			},
 		},
 	});
 </script>
 
 <div>
-	<!-- Input for filtering table rows based on email addresses. -->
-	<div class="flex items-center py-4">
+	<!-- Filtering UI: only show for specified columns -->
+	{#each filterColumns as col}
 		<Input
-			placeholder="Filter emails..."
-			value={table.getColumn('email')?.getFilterValue() as string}
-			onchange={(e) =>
-				table.getColumn('email')?.setFilterValue(e.currentTarget.value)}
+			placeholder={`Filter ${col}...`}
+			value={table.getColumn(col)?.getFilterValue() as string}
 			oninput={(e) =>
-				table.getColumn('email')?.setFilterValue(e.currentTarget.value)}
-			class="max-w-sm"
+				table.getColumn(col)?.setFilterValue(e.currentTarget.value)}
+			class="mr-2 max-w-sm"
 		/>
-		<!-- Dropdown menu for managing column visibility. -->
-		<DropdownMenu.Root>
-			<DropdownMenu.Trigger>
-				{#snippet child({ props })}
-					<Button {...props} variant="outline" class="ml-auto">Columns</Button>
-				{/snippet}
-			</DropdownMenu.Trigger>
-			<DropdownMenu.Content align="end">
-				<!-- Looping through all columns to create checkbox items for visibility control. -->
-				{#each table
-					.getAllColumns()
-					.filter((col) => col.getCanHide()) as column (column.id)}
-					<DropdownMenu.CheckboxItem
-						class="capitalize"
-						bind:checked={
-							() => column.getIsVisible(), (v) => column.toggleVisibility(!!v)
-						}
-					>
-						{column.id}
-						<!-- Displaying column ID for visibility toggle. -->
-					</DropdownMenu.CheckboxItem>
-				{/each}
-			</DropdownMenu.Content>
-		</DropdownMenu.Root>
-	</div>
-	<!-- Table structure for displaying data with headers and rows. -->
-	<div class="rounded-md border">
+	{/each}
+
+	<!-- Column visibility dropdown -->
+	<DropdownMenu.Root>
+		<DropdownMenu.Trigger>
+			<Button variant="outline" class="ml-auto">Columns</Button>
+		</DropdownMenu.Trigger>
+		<DropdownMenu.Content align="end">
+			{#each table
+				.getAllColumns()
+				.filter((col) => col.getCanHide()) as column (column.id)}
+				<DropdownMenu.CheckboxItem
+					class="capitalize"
+					bind:checked={
+						() => column.getIsVisible(), (v) => column.toggleVisibility(!!v)
+					}
+				>
+					{column.id}
+				</DropdownMenu.CheckboxItem>
+			{/each}
+		</DropdownMenu.Content>
+	</DropdownMenu.Root>
+
+	<!-- Table -->
+	<div
+		class="rounded-md border border-slate-200 shadow-sm dark:border-slate-700"
+	>
 		<Table.Root>
 			<Table.Header>
-				<!-- Rendering header groups for the table. -->
 				{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
 					<Table.Row>
 						{#each headerGroup.headers as header (header.id)}
@@ -155,9 +134,12 @@
 				{/each}
 			</Table.Header>
 			<Table.Body>
-				<!-- Rendering rows of data in the table. -->
 				{#each table.getRowModel().rows as row (row.id)}
-					<Table.Row data-state={row.getIsSelected() && 'selected'}>
+					<Table.Row
+						data-state={row.getIsSelected() && 'selected'}
+						class="cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800"
+						onclick={() => (onRowClick ? onRowClick(row.original) : null)}
+					>
 						{#each row.getVisibleCells() as cell (cell.id)}
 							<Table.Cell>
 								<FlexRender
@@ -166,18 +148,24 @@
 								/>
 							</Table.Cell>
 						{/each}
+						{#if rowActions}
+							<Table.Cell>
+								{@html rowActions(row.original)}
+							</Table.Cell>
+						{/if}
 					</Table.Row>
 				{:else}
 					<Table.Row>
 						<Table.Cell colspan={columns.length} class="h-24 text-center">
-							No results. <!-- Message displayed when there are no results to show. -->
+							No results.
 						</Table.Cell>
 					</Table.Row>
 				{/each}
 			</Table.Body>
 		</Table.Root>
 	</div>
-	<!-- Pagination controls for navigating through pages of data. -->
+
+	<!-- Pagination controls -->
 	<div class="flex items-center justify-end space-x-2 py-4">
 		<Button
 			variant="outline"

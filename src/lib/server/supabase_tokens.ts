@@ -4,10 +4,8 @@ export async function getUserSupabaseAccessToken(locals: App.Locals): Promise<st
     const supabase = locals.supabase;
     const sessionData = await locals.safeGetSession();
     const userId = sessionData.user?.id;
-    console.log('Fetching Supabase token...');
 
     if (!userId) {
-        console.log('No user ID found in session data.');
         return null;
     }
 
@@ -21,9 +19,6 @@ export async function getUserSupabaseAccessToken(locals: App.Locals): Promise<st
 
     if (error || !data) return null;
 
-    console.log('Supabase token data:', data);
-
-
     const config = data.config;
     /**
      * config: {
@@ -36,18 +31,14 @@ export async function getUserSupabaseAccessToken(locals: App.Locals): Promise<st
 
     const now = Math.floor(Date.now() / 1000);
 
-    console.log('config:', config)
-
     // If token is still valid, return it
 
     if (config.expires_at && config.expires_at > now + 60) {
-        console.log('Access token is still valid.');
         return config.access_token;
     }
 
     // If expired, refresh it
     if (config.refresh_token) {
-        console.log('Access token expired, refreshing...');
         const clientId = process.env.SUPABASE_OAUTH_CLIENT_ID;
         const clientSecret = process.env.SUPABASE_OAUTH_CLIENT_SECRET;
         const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');

@@ -13,7 +13,6 @@ const ivLength = 16; // For AES, this is always 16
  * @param {string} text
  */
 export function encrypt(text) {
-  console.log('Encrypting text:', text);
   if (typeof text !== 'string') {
     throw new TypeError('The "text" argument must be of type string.');
   }

@@ -1,34 +1,67 @@
 <script lang="ts">
 	import Ellipsis from '@lucide/svelte/icons/ellipsis';
-	import { toast } from 'svelte-sonner';
-	import { Wrench, Clipboard } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import type { SvelteComponent } from 'svelte';
 
-	let { id }: { id: string } = $props();
+	type Action = {
+		label: string;
+		icon?: typeof SvelteComponent;
+		onClick: (row: unknown) => void;
+		show?: boolean | ((row: unknown) => boolean);
+		group?: string;
+	};
 
-	function handleCopy(id: string) {
-		navigator.clipboard.writeText(id);
-		toast(`Copied ID ${id} to clipboard`);
-	}
+	const { actions, row }: { actions: Action[]; row: unknown } = $props();
+
+	// Group actions by group property
+	const grouped = actions
+		.filter(
+			(action) =>
+				action.show === undefined ||
+				(typeof action.show === 'function' ? action.show(row) : action.show),
+		)
+		.reduce(
+			(acc, action) => {
+				const group = action.group ?? 'Other';
+				if (!acc[group]) acc[group] = [];
+				acc[group].push(action);
+				return acc;
+			},
+			{} as Record<string, Action[]>,
+		);
+
+	const groupOrder = ['', 'builder', 'admin']; // customize as needed
 </script>
 
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger>
-		<Button variant="outline" class="">
-			<Ellipsis />
-		</Button>
+		<Button variant="outline"><Ellipsis /></Button>
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content>
-		<DropdownMenu.Group>
-			<DropdownMenu.GroupHeading>Actions</DropdownMenu.GroupHeading>
-			<DropdownMenu.Item onclick={() => handleCopy(id)}>
-				<Clipboard />
-				Copy record ID
-			</DropdownMenu.Item>
-		</DropdownMenu.Group>
-		<DropdownMenu.Separator />
-		<DropdownMenu.Item><Wrench />Table Config</DropdownMenu.Item>
-		<DropdownMenu.Item>View payment details</DropdownMenu.Item>
+		{#each groupOrder as group, i}
+			{#if grouped[group]}
+				<DropdownMenu.Group>
+					<DropdownMenu.GroupHeading>
+						{#if group === ''}
+							Actions
+						{:else}
+							{group.charAt(0).toUpperCase() + group.slice(1)} Actions
+						{/if}
+					</DropdownMenu.GroupHeading>
+					{#each grouped[group] as action (action.label)}
+						<DropdownMenu.Item onclick={() => action.onClick(row)}>
+							{#if action.icon}
+								<action.icon class="mr-2" />
+							{/if}
+							{action.label}
+						</DropdownMenu.Item>
+					{/each}
+				</DropdownMenu.Group>
+				{#if i < groupOrder.length - 1}
+					<DropdownMenu.Separator />
+				{/if}
+			{/if}
+		{/each}
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

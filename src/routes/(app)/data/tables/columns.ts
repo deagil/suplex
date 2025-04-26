@@ -1,54 +1,31 @@
 import type { ColumnDef } from "@tanstack/table-core";
-import { renderComponent } from "$lib/components/ui/data-table/index.js";
-import DataTableActions from "./data-table-actions.svelte";
-import DataTableEmailButton from "./data-table-email-button.svelte";
+// import { renderComponent } from "$lib/components/ui/data-table/index.js";
+// import DataTableActions from "./data-table-actions.svelte";
+// import DataTableEmailButton from "./data-table-email-button.svelte";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
-    id: string;
-    amount: number;
-    status: "pending" | "processing" | "success" | "failed";
-    email: string;
+// Types for Supabase Management API
+export type SupabaseColumn = {
+    name: string;
+    data_type: string;
+    description: string | null;
 };
 
-export const columns: ColumnDef<Payment>[] = [
-    {
-        accessorKey: "status",
-        header: "Status",
-    },
-    {
-        accessorKey: "email",
-        header: ({ column }) =>
-            renderComponent(DataTableEmailButton, {
-                onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
-            }),
-    },
-    {
-        accessorKey: "amount",
-        header: "Amount",
-    },
-    {
-        id: "actions",
-        cell: ({ row }) => {
-            // You can pass whatever you need from `row.original` to the component
-            return renderComponent(DataTableActions, { id: row.original.id });
-        },
-    },
-];
+export type Table = {
+    name: string;
+    description: string | null;
+    row_estimate: number;
+    columns: SupabaseColumn[];
+};
 
-export const data: Payment[] = [
-    {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "m@example.com",
-    },
-    {
-        id: "489e1d42",
-        amount: 125,
-        status: "processing",
-        email: "example@gmail.com",
-    },
-    // ...
-];
+// Generate columns for TanStack Table from SupabaseTable.columns
+export function generateColumns(columns: SupabaseColumn[]): ColumnDef<any>[] {
+    console.log("Generating columns for TanStack Table", columns);
+    return columns.map((col) => ({
+        id: col.name,
+        accessorKey: col.name,
+        header: col.name,
+        cell: info => info.getValue(),
+    }));
+}

@@ -39,11 +39,11 @@
 					},
 					{
 						title: 'Forms',
-						url: '#',
+						url: '/data/forms',
 					},
 					{
 						title: 'Parameters',
-						url: '#',
+						url: '/dara/parameters',
 					},
 				],
 			},
@@ -111,7 +111,7 @@
 				items: [
 					{
 						title: 'Supabase',
-						url: '#',
+						url: 'integrations/supabase',
 					},
 					{
 						title: 'Tally Forms',
@@ -134,7 +134,7 @@
 				items: [
 					{
 						title: 'Profile',
-						url: '#',
+						url: '/settings/profile',
 					},
 					{
 						title: 'Team',
@@ -142,7 +142,7 @@
 					},
 					{
 						title: 'Billing',
-						url: '#',
+						url: '/settings/billing',
 					},
 					{
 						title: 'Security',
@@ -190,6 +190,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import type { ComponentProps } from 'svelte';
 	import { supabaseProjectId } from '$lib/stores/supabaseProject'; // see below
+	import { goto } from '$app/navigation';
 
 	let {
 		ref = $bindable(null),
@@ -220,7 +221,6 @@
 	});
 
 	function selectProject(id: string) {
-		console.log('Selected project:', id);
 		selectedProject = id;
 		supabaseProjectId.set(id);
 		document.cookie = `supabase_project_id=${id}; path=/`;
@@ -254,7 +254,9 @@
 						</DropdownMenu.Trigger>
 						<DropdownMenu.Content>
 							{#if !supabaseConnected}
-								<DropdownMenu.Item disabled>
+								<DropdownMenu.Item
+									onclick={() => goto('/integrations/supabase')}
+								>
 									<span>Connect your Supabase account</span>
 								</DropdownMenu.Item>
 							{:else if projects.length === 0}

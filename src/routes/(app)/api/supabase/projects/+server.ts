@@ -3,7 +3,6 @@ import { getUserSupabaseAccessToken } from '$lib/server/supabase_tokens'
 
 export async function GET({ locals }) {
     const accessToken = await getUserSupabaseAccessToken(locals); // implement this
-    console.log('Access Token:', accessToken);
     if (!accessToken) {
         return json({ projects: [] }, { status: 401 });
     }
@@ -12,6 +11,5 @@ export async function GET({ locals }) {
     });
     if (!res.ok) return json({ projects: [] }, { status: 500 });
     const projects = await res.json();
-    console.log('Projects:', projects);
     return json({ projects });
 }
