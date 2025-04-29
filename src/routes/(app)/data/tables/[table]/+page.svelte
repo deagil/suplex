@@ -3,6 +3,7 @@
 	import { renderComponent } from '$lib/components/ui/data-table/index.js';
 	import { generateColumns } from '../columns';
 	import DataTableActions from '../data-table-actions.svelte';
+	import { page } from '$app/state';
 	import {
 		Clipboard,
 		Wrench,
@@ -15,6 +16,7 @@
 
 	let { data } = $props();
 	const columns = generateColumns(data.columns);
+	const table = data.tableName;
 	const columnsWithActions = [
 		...columns,
 		{
@@ -74,6 +76,15 @@
 	function handleEdit(row: object) {
 		/* ... */
 	}
+
+	function handleRowClick(row: { name: any }) {
+		// navigate to the table detail page
+		goto(`/data/tables/${table}/${row.id}`);
+	}
 </script>
 
-<DataTable columns={columnsWithActions} data={data.rows} />
+<DataTable
+	columns={columnsWithActions}
+	data={data.rows}
+	onRowClick={handleRowClick}
+/>

@@ -21,7 +21,7 @@ export type Table = {
 
 // Generate columns for TanStack Table from SupabaseTable.columns
 export function generateColumns(columns: SupabaseColumn[]): ColumnDef<any>[] {
-    console.log("Generating columns for TanStack Table", columns);
+    // console.log("Generating columns for TanStack Table", columns);
     return columns.map((col) => ({
         id: col.name,
         accessorKey: col.name,

@@ -11,7 +11,12 @@ export const load: PageServerLoad = async ({
     return redirect(303, '/login');
   }
 
+  console.error('Fetching tables data');
   const res = await fetch('/api/supabase/tables');
+  if (!res.ok) {
+    console.error('Error fetching tables:', res);
+    return redirect(303, '/activity');
+  }
   const { tables } = await res.json();
   return { tables: tables as Table[] };
 }

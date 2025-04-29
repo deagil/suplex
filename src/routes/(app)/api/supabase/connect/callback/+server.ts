@@ -56,7 +56,7 @@ export async function GET(event) {
   const tokens = await res.json();
 
   // TODO: Save the tokens in your database and update the user's profile to mark them as connected.
-  console.log('Received tokens:', tokens);
+  // console.log('Received tokens:', tokens);
   const sessionData = await locals.safeGetSession();
   const userId = sessionData.user?.id;
   if (userId) {
@@ -74,12 +74,12 @@ export async function GET(event) {
       });
 
     if (dbError) {
-      console.error('Error saving tokens:', dbError);
+      // console.error('Error saving tokens:', dbError);
       throw error(500, 'Failed to save tokens');
     }
 
     if (data) {
-      console.log('Tokens saved successfully:', data);
+      // console.log('Tokens saved successfully:', data);
     }
   }
 

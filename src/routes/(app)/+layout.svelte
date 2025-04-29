@@ -124,10 +124,11 @@
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import FloatingSidebar from '$lib/components/floating-sidebar.svelte';
-	import { Toaster } from 'svelte-sonner';
+	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	let { data, children } = $props();
 </script>
 
+<Toaster richColors position="top-center" />
 <Sidebar.Provider>
 	<AppSidebar side="left" />
 	<Sidebar.Inset>
@@ -139,9 +140,7 @@
 			</div>
 		</header>
 		<div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-			<Toaster />
 			{@render children?.()}
-			<!-- //<div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"></div> -->
 		</div>
 	</Sidebar.Inset>
 	<FloatingSidebar side="right" collapsible="offcanvas" />

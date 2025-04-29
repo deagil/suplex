@@ -18,7 +18,7 @@
 		user: {
 			name: 'shadcn',
 			email: 'm@example.com',
-			avatar: '/images/profile.jpeg',
+			avatar: '/images/suplex-logo.png',
 		},
 		navMain: [
 			{

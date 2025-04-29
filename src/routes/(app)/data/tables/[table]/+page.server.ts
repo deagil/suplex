@@ -12,8 +12,13 @@ export const load: PageServerLoad = async ({
     }
 
     // Use params.table to fetch the correct table
+    console.log('Fetching table data for:', params.table);
     const res = await fetch(`/api/supabase/table?table=${encodeURIComponent(params.table)}`);
     const { columns, rows, error } = await res.json();
+    if (res.status !== 200) {
+        console.error('Error fetching table data:', error);
+        return redirect(303, '/#');
+    }
     if (error) throw new Error(error);
 
     return { columns, rows, tableName: params.table };

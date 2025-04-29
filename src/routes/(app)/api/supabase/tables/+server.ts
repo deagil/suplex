@@ -1,6 +1,11 @@
 import { json } from '@sveltejs/kit';
 import { getUserSupabaseAccessToken } from '$lib/server/supabase_tokens';
 
+const debug = false;
+function log(...args: any[]) {
+    if (debug) console.log('[tables]', ...args);
+}
+
 export async function GET(event) {
     return getAllTables(event);
 }
@@ -15,6 +20,7 @@ async function getAllTables({ locals, cookies, url }) {
     if (!user?.id) {
         return json({ error: 'Unauthorized' }, { status: 401 });
     }
+    log('User session validated for user:', user.id);
 
     const projectId = cookies.get('supabase_project_id');
     if (!projectId) {
@@ -25,11 +31,14 @@ async function getAllTables({ locals, cookies, url }) {
     if (!accessToken) {
         return json({ error: 'No Supabase access token' }, { status: 401 });
     }
+    log('Retrieved project ID and access token', { projectId, accessTokenExists: !!accessToken });
 
     const tableFilter = url.searchParams.get('name');
     const sqlQuery = getTablesQuery(tableFilter);
 
     const apiUrl = `https://api.supabase.com/v1/projects/${projectId}/database/query`;
+
+    log('Making Supabase query with SQL:', sqlQuery.trim());
 
     const res = await fetch(apiUrl, {
         body: JSON.stringify({ query: sqlQuery }),
@@ -42,10 +51,12 @@ async function getAllTables({ locals, cookies, url }) {
 
     if (!res.ok) {
         const err = await res.text();
+        log('Failed to fetch tables:', err);
         return json({ error: `Failed to fetch tables: ${err}` }, { status: 500 });
     }
 
     const tables = await res.json();
+    log('Received tables response:', tables);
     return json({ tables });
 }
 

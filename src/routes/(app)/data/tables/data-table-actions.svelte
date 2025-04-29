@@ -36,19 +36,17 @@
 
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger>
-		<Button variant="outline"><Ellipsis /></Button>
+		<Button variant="outline">Actions</Button>
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content>
 		{#each groupOrder as group, i}
 			{#if grouped[group]}
 				<DropdownMenu.Group>
-					<DropdownMenu.GroupHeading>
-						{#if group === ''}
-							Actions
-						{:else}
+					{#if group != ''}
+						<DropdownMenu.GroupHeading>
 							{group.charAt(0).toUpperCase() + group.slice(1)} Actions
-						{/if}
-					</DropdownMenu.GroupHeading>
+						</DropdownMenu.GroupHeading>
+					{/if}
 					{#each grouped[group] as action (action.label)}
 						<DropdownMenu.Item onclick={() => action.onClick(row)}>
 							{#if action.icon}
