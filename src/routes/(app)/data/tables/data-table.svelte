@@ -114,7 +114,7 @@
 
 	<!-- Table -->
 	<div
-		class="rounded-md border border-slate-200 shadow-sm dark:border-slate-700"
+		class="mt-2 rounded-md border border-slate-200 shadow-sm dark:border-slate-700"
 	>
 		<Table.Root>
 			<Table.Header>

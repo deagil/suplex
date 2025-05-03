@@ -4,8 +4,12 @@ export async function getUserSupabaseAccessToken(locals: App.Locals): Promise<st
     const supabase = locals.supabase;
     const sessionData = await locals.safeGetSession();
     const userId = sessionData.user?.id;
+    const debug = true;
 
     if (!userId) {
+        if (debug) {
+            console.log('No user ID found in session data.');
+        }
         return null;
     }
 
@@ -17,7 +21,16 @@ export async function getUserSupabaseAccessToken(locals: App.Locals): Promise<st
         .eq('app', 'supabase_token')
         .single();
 
-    if (error || !data) return null;
+    if (error || !data) {
+        if (debug) {
+            console.log('Error fetching Supabase token:', error);
+        }
+        return null;
+    }
+
+    if (debug) {
+        console.log('Supabase token data:', data);
+    }
 
     const config = data.config;
     /**
@@ -34,11 +47,17 @@ export async function getUserSupabaseAccessToken(locals: App.Locals): Promise<st
     // If token is still valid, return it
 
     if (config.expires_at && config.expires_at > now + 60) {
+        if (debug) {
+            console.log('Supabase token is still valid.');
+        }
         return config.access_token;
     }
 
     // If expired, refresh it
     if (config.refresh_token) {
+        if (debug) {
+            console.log('Supabase token expired, refreshing...');
+        }
         const clientId = process.env.SUPABASE_OAUTH_CLIENT_ID;
         const clientSecret = process.env.SUPABASE_OAUTH_CLIENT_SECRET;
         const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
@@ -55,7 +74,9 @@ export async function getUserSupabaseAccessToken(locals: App.Locals): Promise<st
             },
             body: params.toString()
         });
-
+        if (debug) {
+            console.log('Supabase token refresh response:', res);
+        }
         if (res.ok) {
             const tokens = await res.json();
             const newExpiresAt = now + (tokens.expires_in ?? 3600);
@@ -70,7 +91,7 @@ export async function getUserSupabaseAccessToken(locals: App.Locals): Promise<st
                     }
                 })
                 .eq('user_id', userId)
-                .eq('app', 'supabase');
+                .eq('app', 'supabase_token');
 
             return tokens.access_token;
         }

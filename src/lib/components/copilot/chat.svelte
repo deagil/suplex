@@ -56,7 +56,7 @@
 </script>
 
 <!-- //add rounded corners  -->
-<div class="flex h-dvh min-w-0 flex-col rounded-lg bg-background">
+<div class="flex h-dvh min-w-0 flex-col rounded-xl bg-background">
 	<ChatHeader {user} {chat} {readonly} />
 	<Messages
 		{readonly}
@@ -66,7 +66,7 @@
 	/>
 
 	<form
-		class="mx-auto flex w-full gap-2 bg-background px-4 pb-4 md:max-w-3xl md:pb-6"
+		class="mx-auto flex w-full gap-2 rounded-xl bg-background px-4 pb-4 md:max-w-3xl md:pb-6"
 	>
 		{#if !readonly}
 			<MultimodalInput {attachments} {user} {chatClient} class="flex-1" />

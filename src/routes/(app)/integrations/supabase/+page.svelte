@@ -77,6 +77,14 @@
 				<Alert variant="default" class="w-full text-center">
 					Connected as {supabaseOrganization.name} ({supabaseOrganization.id})
 				</Alert>
+				<Button
+					onclick={() => {
+						window.location.href = '/api/supabase/check';
+					}}
+					class="button-primary"
+					aria-label="Check Supabase"
+					type="button">Check connection</Button
+				>
 			{:else if loading}
 				<Alert variant="default" class="w-full text-center">
 					Checking Supabase connection...

@@ -133,7 +133,7 @@
 	});
 </script>
 
-<div class="relative flex w-full flex-col gap-4">
+<div class="bg-prim relative flex w-full flex-col gap-4">
 	{#if mounted && chatClient.messages.length === 0 && attachments.length === 0 && uploadQueue.length === 0}
 		<SuggestedActions {user} {chatClient} />
 	{/if}

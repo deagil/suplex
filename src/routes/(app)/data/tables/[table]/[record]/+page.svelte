@@ -99,17 +99,6 @@
 						</Tooltip.Content>
 					</Tooltip.Root>
 				</Tooltip.Provider>
-
-				<!-- <DropdownMenu>
-					<DropdownMenuTrigger>
-						<Button variant="ghost"><Ellipsis /></Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuItem>Edit Record</DropdownMenuItem>
-						<DropdownMenuItem>Delete</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu> -->
-				<!-- OR a dropdown menu here -->
 			</div>
 			{#each Object.entries(formValues) as [column, value]}
 				<div class="mb-2 pb-1">

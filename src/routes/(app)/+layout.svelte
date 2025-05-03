@@ -125,23 +125,35 @@
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import FloatingSidebar from '$lib/components/floating-sidebar.svelte';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
+	import Chat from '$lib/components/copilot/chat.svelte';
 	let { data, children } = $props();
+
+	// console.log('layout props', data);
 </script>
 
 <Toaster richColors position="top-center" />
 <Sidebar.Provider>
 	<AppSidebar side="left" />
-	<Sidebar.Inset>
-		<header class="flex h-16 shrink-0 items-center gap-4">
-			<div class="flex items-center gap-2 px-4">
-				<Sidebar.Trigger class="-ml-1" />
-				<Separator orientation="vertical" class="mr-2 h-4" />
-				<Breadcrumbs />
+	<Sidebar.Inset class="flex w-3/4 flex-col">
+		<div class="flex flex-1 flex-col p-4 pt-0">
+			<!-- Main content: 3/4 -->
+			<div class="flex flex-col p-1">
+				<header class="flex h-16 shrink-0 items-center gap-4">
+					<div class="flex items-center gap-2 px-4">
+						<Sidebar.Trigger class="-ml-1" />
+						<Separator orientation="vertical" class="mr-2 h-4" />
+						<Breadcrumbs />
+					</div>
+				</header>
+				{@render children?.()}
 			</div>
-		</header>
-		<div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-			{@render children?.()}
+			<!-- Sidebar: 1/4 -->
 		</div>
 	</Sidebar.Inset>
-	<FloatingSidebar side="right" collapsible="offcanvas" />
+	<div class="flex w-1/4 flex-col overflow-hidden rounded-lg bg-primary p-2">
+		<!-- Chat area, scrollable -->
+		<div class="flex-1 overflow-y-auto bg-primary">
+			<Chat />
+		</div>
+	</div>
 </Sidebar.Provider>
