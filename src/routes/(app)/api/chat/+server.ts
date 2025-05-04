@@ -1,7 +1,5 @@
-export const csr = false;
-
 import { redirect, error } from '@sveltejs/kit';
-import { ok, safeTry } from 'neverthrow';
+// import { ok} from 'neverthrow';
 import {
 	createDataStreamResponse,
 	streamText,
@@ -39,27 +37,36 @@ export async function POST({ request, locals, cookies }) {
 		error(400, 'No user message found');
 	}
 
-	// For authenticated users, attempt to fetch (or create) their chat, then save the message.
-	await safeTry(async function* () {
+	try {
 		let chat;
 		try {
+			console.log('Fetching chat by id:', id);
 			chat = await getChatById({ supabaseClient: supabase, id });
-			yield;
-		} catch (e: { message: string }) {
+			console.log('Found chat:', chat);
+		} catch (e: any) {
+			console.warn('Chat not found, error:', e);
 			// If not found, assume DbEntityNotFoundError and create new chat.
-			if (e.message.includes('No rows')) {
-				const titleResult = await generateTitleFromUserMessage({ message: userMessage });
-				const title = titleResult.unwrapOr('New Chat');
+			if (e.message && e.message.includes('no) rows returned')) {
+				console.log('Generating title for new chat...');
+				const title = await generateTitleFromUserMessage({ message: userMessage }).catch(err => {
+					console.error('Error generating title:', err);
+					return 'New Chat';
+				});
+				console.log('Generated title:', title);
 				chat = await saveChat({ supabaseClient: supabase, id, userId: user.id, title });
+				console.log('Created new chat:', chat);
 			} else {
+				console.error('Error fetching chat:', e);
 				throw e;
 			}
 		}
 
 		if (chat.user_id !== user.id) {
-			error(403, 'Forbidden');
+			console.warn('User does not own chat:', { chatUserId: chat.user_id, userId: user.id });
+			return error(403, 'Forbidden');
 		}
 
+		console.log('Saving user message:', userMessage);
 		await saveMessages({
 			supabaseClient: supabase,
 			messages: [
@@ -67,15 +74,17 @@ export async function POST({ request, locals, cookies }) {
 					chat_id: id,
 					id: userMessage.id,
 					role: 'user',
-					parts: userMessage.parts,
+					parts: userMessage.parts ?? [],
 					attachments: userMessage.experimental_attachments ?? [],
 					created_at: new Date().toISOString(),
 				},
 			],
 		});
-
-		return ok(undefined);
-	}).orElse(() => error(500, 'An error occurred while processing your request'));
+		console.log('User message saved');
+	} catch (e) {
+		console.error('Error in POST handler:', e);
+		return error(500, 'An error occurred while processing your request: ' + e.message,);
+	}
 
 	// Return a data stream response using your language model provider.
 	return createDataStreamResponse({
@@ -104,9 +113,9 @@ export async function POST({ request, locals, cookies }) {
 						messages: [
 							{
 								id: assistantId,
-								chatId: id,
+								chat_id: id,
 								role: 'assistant',
-								parts: response.messages.find((msg) => msg.id === assistantId)?.parts,
+								parts: response.messages.find((msg) => msg.id === assistantId)?.parts ?? [],
 								attachments:
 									response.messages.find((msg) => msg.id === assistantId)?.experimental_attachments ?? [],
 								created_at: new Date().toISOString(),
@@ -125,7 +134,7 @@ export async function POST({ request, locals, cookies }) {
 		},
 		onError: (e) => {
 			console.error(e);
-			return 'Oops!';
+			return `Oops! ${e.message}`;
 		},
 	});
 }

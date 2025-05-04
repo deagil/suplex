@@ -1,5 +1,5 @@
 import type { VisibilityType } from '$lib/components/copilot/visibility-selector.svelte';
-import { updateChatVisiblityById } from '$lib/server/db/queries';
+import { updateChatVisiblityById } from '$lib/server/ai/chat_queries';
 
 export async function POST({ request }) {
 	const { chatId, visibility }: { chatId: string; visibility: VisibilityType } =
