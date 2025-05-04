@@ -8,6 +8,7 @@ import {
 import { myProvider } from '$lib/server/ai/models';
 import { systemPrompt } from '$lib/server/ai/prompts.js';
 import { generateTitleFromUserMessage } from '$lib/server/ai/utils';
+import { logAIUsage } from '$lib/server/ai/token_usage';
 import {
 	getChatById,
 	saveChat,
@@ -97,7 +98,10 @@ export async function POST({ request, locals, cookies }) {
 				experimental_activeTools: [],
 				experimental_transform: smoothStream({ chunking: 'word' }),
 				experimental_generateMessageId: crypto.randomUUID.bind(crypto),
-				onFinish: async ({ response }) => {
+				onFinish: async ({ response, usage }) => {
+					console.log('Response finished:', response);
+					console.log('Response messages:', response.messages[0].content);
+					console.log('Response usage:', usage);
 					if (!user) return;
 					const assistantId = getTrailingMessageId({
 						messages: response.messages.filter((message) => message.role === 'assistant'),
@@ -115,12 +119,34 @@ export async function POST({ request, locals, cookies }) {
 								id: assistantId,
 								chat_id: id,
 								role: 'assistant',
-								parts: response.messages.find((msg) => msg.id === assistantId)?.parts ?? [],
+								// Save as array of { type, text } objects
+								parts: (response.messages.find((msg) => msg.id === assistantId)?.content ?? [])
+									.filter((c: any) => c.type === 'text' && c.text)
+									.map((c: any) => ({ type: c.type, text: c.text })),
 								attachments:
 									response.messages.find((msg) => msg.id === assistantId)?.experimental_attachments ?? [],
 								created_at: new Date().toISOString(),
 							},
 						],
+					});
+
+					// Calculate tokens and cost (example: adjust as needed)
+					const tokens = usage?.totalTokens ?? 0;
+					const promptTokens = usage?.promptTokens ?? 0;
+					const completionTokens = usage?.completionTokens ?? 0;
+					const inputCost = (promptTokens / 1_000_000) * 0.1;
+					const outputCost = (completionTokens / 1_000_000) * 0.4;
+					const costUsd = inputCost + outputCost;
+					console.log('Tokens:', { tokens, promptTokens, completionTokens });
+					console.log('Costs:', { inputCost, outputCost, costUsd });
+					await logAIUsage({
+						supabase,
+						userId: user.id,
+						feature: 'chat',
+						costUsd,
+						tokens,
+						model: response.modelId,
+						metadata: { chat_id: id, prompt_tokens: promptTokens, completion_tokens: completionTokens, input_cost: inputCost, output_cost: outputCost },
 					});
 				},
 				experimental_telemetry: {

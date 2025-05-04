@@ -4,7 +4,7 @@ import { streamText } from 'ai';
 import { customProvider, extractReasoningMiddleware, wrapLanguageModel } from 'ai';
 import { PRIVATE_OPENAI_KEY } from '$env/static/private';
 
-const openai = createOpenAI({ apiKey: PRIVATE_OPENAI_KEY });
+const openai = createOpenAI({ apiKey: PRIVATE_OPENAI_KEY, compatibility: 'strict' });
 
 // export const myProvider = customProvider({
 // 	languageModels: {
@@ -21,10 +21,10 @@ const openai = createOpenAI({ apiKey: PRIVATE_OPENAI_KEY });
 
 export const myProvider = customProvider({
 	languageModels: {
-		'title-model': openai('gpt-4o-mini'),
-		'chat-model': openai('gpt-4o-mini'),
+		'title-model': openai('gpt-4.1-nano'),
+		'chat-model': openai('gpt-4.1-nano'),
 		'chat-model-reasoning': wrapLanguageModel({
-			model: openai('gpt-o3-mini'),
+			model: openai('o4-mini'),
 			middleware: extractReasoningMiddleware({ tagName: 'think' })
 		}),
 	},

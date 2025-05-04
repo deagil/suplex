@@ -11,7 +11,6 @@
 	import Sparkles from './icons/sparkles.svelte';
 	import MessagesSquare from '@lucide/svelte/icons/messages-square';
 	import Database from '@lucide/svelte/icons/database';
-	import ChevronDown from './icons/chevron-down.svelte';
 	import FolderOpen from '@lucide/svelte/icons/folder-open';
 
 	const data = {
