@@ -24,7 +24,21 @@
 		readonly: boolean;
 	} = $props();
 
+	console.log('[Chat] Initial props:', {
+		user,
+		chat,
+		readonly,
+		initialMessages,
+	});
+
 	const chatHistory = ChatHistory.fromContext();
+
+	console.log('[Chat] ChatHistory from context:', chatHistory);
+
+	$effect(() => {
+		console.log('[Chat] chat prop changed:', chat);
+		console.log('[Chat] chatHistory.chats:', chatHistory.chats);
+	});
 
 	const chatClient = $derived(
 		new Chat({
@@ -33,7 +47,12 @@
 			sendExtraMessageFields: true,
 			generateId: crypto.randomUUID.bind(crypto),
 			onFinish: async () => {
+				console.log('[Chat] onFinish: refetching chatHistory...');
 				await chatHistory.refetch();
+				console.log(
+					'[Chat] onFinish: chatHistory.chats after refetch:',
+					chatHistory.chats,
+				);
 			},
 			onError: (error) => {
 				try {

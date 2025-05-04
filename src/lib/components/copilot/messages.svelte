@@ -5,9 +5,22 @@
 	import PreviewMessage from '../messages/preview-message.svelte';
 	import type { UIMessage } from '@ai-sdk/svelte';
 	import { getLock } from '$lib/hooks/lock';
+	import { fade } from 'svelte/transition'; // 1. Import fade
 
 	let containerRef = $state<HTMLDivElement | null>(null);
 	let endRef = $state<HTMLDivElement | null>(null);
+	let minThinking = $state(false);
+
+	// When loading starts, set minThinking true for at least 600ms
+	$effect(() => {
+		if (loading) {
+			minThinking = true;
+			const t = setTimeout(() => (minThinking = false), 2000);
+			return () => clearTimeout(t);
+		} else {
+			minThinking = false;
+		}
+	});
 
 	let {
 		readonly,
@@ -31,7 +44,7 @@
 
 		const observer = new MutationObserver(() => {
 			if (!endRef || scrollLock.locked) return;
-			endRef.scrollIntoView({ behavior: 'instant', block: 'end' });
+			endRef.scrollIntoView({ behavior: 'smooth', block: 'end' }); // 3. Use smooth scroll
 		});
 
 		observer.observe(containerRef, {
@@ -57,8 +70,8 @@
 		<PreviewMessage {message} {readonly} {loading} />
 	{/each}
 
-	{#if loading && messages.length > 0 && messages[messages.length - 1].role === 'user'}
-		<ThinkingMessage />
+	{#if (loading || minThinking) && messages.length > 0 && messages[messages.length - 1].role === 'user'}
+		<ThinkingMessage phase={loading ? 'thinking' : 'finishing'} />
 	{/if}
 
 	<div bind:this={endRef} class="min-h-[24px] min-w-[24px] shrink-0"></div>

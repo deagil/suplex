@@ -5,6 +5,7 @@ import { chatModels, DEFAULT_CHAT_MODEL } from '$lib/components/copilot/ai_model
 export const load: LayoutServerLoad = async ({
 	cookies,
 	locals: { safeGetSession },
+	fetch
 }) => {
 	const { session } = await safeGetSession();
 	if (!session) {
@@ -27,10 +28,13 @@ export const load: LayoutServerLoad = async ({
 		});
 	}
 
+	const chats = await fetch('/api/history').then(r => r.json());
+
 	return {
 		user,
 		sidebarCollapsed,
 		// Return a serializable value (modelId) instead of a class instance.
-		selectedChatModel: modelId
+		selectedChatModel: modelId,
+		chats
 	};
 };

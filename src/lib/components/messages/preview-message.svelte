@@ -24,16 +24,8 @@
 	data-role={message.role}
 	in:fly|global={{ opacity: 0, y: 5 }}
 >
-	<div
-		class={cn(
-			'flex w-full gap-4 group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl',
-			{
-				'w-full': mode === 'edit',
-				'group-data-[role=user]/message:w-fit': mode !== 'edit',
-			},
-		)}
-	>
-		{#if message.role === 'assistant'}
+	{#if message.role === 'assistant'}
+		<div class="flex w-full flex-col items-start gap-2">
 			<div
 				class="flex size-8 shrink-0 items-center justify-center rounded-full bg-background ring-1 ring-border"
 			>
@@ -41,63 +33,101 @@
 					<SparklesIcon size={14} />
 				</div>
 			</div>
-		{/if}
-
-		<div class="flex w-full flex-col gap-4">
-			{#if message.experimental_attachments && message.experimental_attachments.length > 0}
-				<div class="flex flex-row justify-end gap-2">
-					{#each message.experimental_attachments as attachment (attachment.url)}
-						<PreviewAttachment {attachment} />
-					{/each}
-				</div>
-			{/if}
-
-			{#each message.parts as part, i (`${message.id}-${i}`)}
-				{@const { type } = part}
-				{#if type === 'reasoning'}
-					<MessageReasoning {loading} reasoning={part.reasoning} />
-				{:else if type === 'text'}
-					{#if mode === 'view'}
-						<div class="flex flex-row items-start gap-2">
-							{#if message.role === 'user' && !readonly}
-								<Tooltip>
-									<TooltipTrigger>
-										{#snippet child({ props })}
-											<Button
-												{...props}
-												variant="ghost"
-												class="h-fit rounded-full px-2 text-muted-foreground opacity-0 group-hover/message:opacity-100"
-												onclick={() => {
-													mode = 'edit';
-												}}
-											>
-												<PencilEditIcon />
-											</Button>
-										{/snippet}
-									</TooltipTrigger>
-									<TooltipContent>Edit message</TooltipContent>
-								</Tooltip>
-							{/if}
-							<div
-								class={cn('flex flex-col gap-4', {
-									'rounded-xl bg-primary px-3 py-2 text-primary-foreground':
-										message.role === 'user',
-								})}
-							>
+			<div class="flex w-full max-w-3xl flex-col gap-4">
+				{#if message.experimental_attachments && message.experimental_attachments.length > 0}
+					<div class="flex flex-row justify-end gap-2">
+						{#each message.experimental_attachments as attachment (attachment.url)}
+							<PreviewAttachment {attachment} />
+						{/each}
+					</div>
+				{/if}
+				{#each message.parts as part, i (`${message.id}-${i}`)}
+					{@const { type } = part}
+					{#if type === 'reasoning'}
+						<MessageReasoning {loading} reasoning={part.reasoning} />
+					{:else if type === 'text'}
+						{#if mode === 'view'}
+							<div class="flex w-full flex-col gap-4">
 								<Markdown md={part.text} />
 							</div>
-						</div>
-					{:else if mode === 'edit'}
-						<div class="flex flex-row items-start gap-2">
-							<div class="size-8"></div>
-
-							<!-- TODO -->
-							<!-- <MessageEditor key={message.id} {message} {setMode} {setMessages} {reload} /> -->
-						</div>
+						{:else if mode === 'edit'}
+							<div class="flex flex-row items-start gap-2">
+								<div class="size-8"></div>
+								<!-- TODO -->
+								<!-- <MessageEditor key={message.id} {message} {setMode} {setMessages} {reload} /> -->
+							</div>
+						{/if}
 					{/if}
+				{/each}
+				<!-- TODO -->
+				<!-- {#if !readonly}
+					<MessageActions key={`action-${message.id}`} {chatId} {message} {vote} {isLoading} />
+				{/if} -->
+			</div>
+		</div>
+	{:else if message.role === 'user'}
+		<div
+			class={cn(
+				'flex w-full gap-4 group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl',
+				{
+					'w-full': mode === 'edit',
+					'group-data-[role=user]/message:w-fit': mode !== 'edit',
+				},
+			)}
+		>
+			<div class="flex w-full flex-col gap-4">
+				{#if message.experimental_attachments && message.experimental_attachments.length > 0}
+					<div class="flex flex-row justify-end gap-2">
+						{#each message.experimental_attachments as attachment (attachment.url)}
+							<PreviewAttachment {attachment} />
+						{/each}
+					</div>
+				{/if}
+				{#each message.parts as part, i (`${message.id}-${i}`)}
+					{@const { type } = part}
+					{#if type === 'reasoning'}
+						<MessageReasoning {loading} reasoning={part.reasoning} />
+					{:else if type === 'text'}
+						{#if mode === 'view'}
+							<div class="flex flex-row items-start gap-2">
+								{#if !readonly}
+									<Tooltip>
+										<TooltipTrigger>
+											{#snippet child({ props })}
+												<Button
+													{...props}
+													variant="ghost"
+													class="h-fit rounded-full px-2 text-muted-foreground opacity-0 group-hover/message:opacity-100"
+													onclick={() => {
+														mode = 'edit';
+													}}
+												>
+													<PencilEditIcon />
+												</Button>
+											{/snippet}
+										</TooltipTrigger>
+										<TooltipContent>Edit message</TooltipContent>
+									</Tooltip>
+								{/if}
+								<div
+									class={cn('flex flex-col gap-4', {
+										'rounded-xl bg-primary px-3 py-2 text-primary-foreground':
+											message.role === 'user',
+									})}
+								>
+									<Markdown md={part.text} />
+								</div>
+							</div>
+						{:else if mode === 'edit'}
+							<div class="flex flex-row items-start gap-2">
+								<div class="size-8"></div>
+								<!-- TODO -->
+								<!-- <MessageEditor key={message.id} {message} {setMode} {setMessages} {reload} /> -->
+							</div>
+						{/if}
 
-					<!-- TODO -->
-					<!-- {:else if type === 'tool-invocation'}
+						<!-- TODO -->
+						<!-- {:else if type === 'tool-invocation'}
 					{@const { toolInvocation } = part}
 					{@const { toolName, state } = toolInvocation}
 
@@ -134,13 +164,13 @@
 							{/if}
 						</div>
 					{/if} -->
-				{/if}
-			{/each}
-
-			<!-- TODO -->
-			<!-- {#if !readonly}
-				<MessageActions key={`action-${message.id}`} {chatId} {message} {vote} {isLoading} />
-			{/if} -->
+					{/if}
+				{/each}
+				<!-- TODO -->
+				<!-- {#if !readonly}
+					<MessageActions key={`action-${message.id}`} {chatId} {message} {vote} {isLoading} />
+				{/if} -->
+			</div>
 		</div>
-	</div>
+	{/if}
 </div>

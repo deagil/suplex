@@ -123,12 +123,14 @@
 	import Breadcrumbs from './components/breadcrumbs.svelte';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
-	import FloatingSidebar from '$lib/components/floating-sidebar.svelte';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	import Chat from '$lib/components/copilot/chat.svelte';
+	import { ChatHistory } from '$lib/hooks/chat-history.svelte';
 	let { data, children } = $props();
 
-	// console.log('layout props', data);
+	// You may want to pass a promise that fetches the initial chats
+	const chatHistory = new ChatHistory(Promise.resolve(data.chats));
+	chatHistory.setContext();
 </script>
 
 <Toaster richColors position="top-center" />
@@ -152,8 +154,13 @@
 	</Sidebar.Inset>
 	<div class="flex w-1/4 flex-col overflow-hidden rounded-lg bg-primary p-2">
 		<!-- Chat area, scrollable -->
-		<div class="flex-1 overflow-y-auto bg-primary">
-			<Chat />
+		<div class="min-h-0 flex-1 overflow-y-auto bg-primary">
+			<Chat
+				chat={undefined}
+				initialMessages={[]}
+				readonly={false}
+				user={data.user}
+			/>
 		</div>
 	</div>
 </Sidebar.Provider>
