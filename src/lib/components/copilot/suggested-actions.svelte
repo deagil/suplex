@@ -42,7 +42,7 @@
 				variant="ghost"
 				onclick={async () => {
 					if (user) {
-						replaceState(`/chat/${chatClient.id}`, {});
+						// replaceState(`?chatid=${chatClient.id}`, {});
 					}
 					await chatClient.append({
 						role: 'user',

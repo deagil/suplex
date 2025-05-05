@@ -12,7 +12,7 @@
 	const chatHistory = new ChatHistory(Promise.resolve(data.chats));
 	chatHistory.setContext();
 
-	let selectedChat = $state(data.chats?.[0] ?? null);
+	let selectedChat = $state(null);
 	let messages = $state([]);
 
 	async function fetchMessages(chatId: string) {
