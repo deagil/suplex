@@ -17,22 +17,30 @@
 	let { data }: { data: PageData } = $props();
 	let usage = data.usage || [];
 
-	// Calculate summary stats
-	let totalCost = $state(0);
-	let totalTokens = $state(0);
-	let byFeature: Record<string, { cost: number; count: number }> = $state({});
-
-	$effect(() => {
-		totalCost = 0;
-		totalTokens = 0;
-		byFeature = {};
+	let totalCost = $derived.by(() => {
+		let cost = 0;
 		for (const u of usage) {
-			totalCost += Number(u.cost_usd || 0);
-			totalTokens += Number(u.tokens || 0);
-			if (!byFeature[u.feature]) byFeature[u.feature] = { cost: 0, count: 0 };
-			byFeature[u.feature].cost += Number(u.cost_usd || 0);
-			byFeature[u.feature].count += 1;
+			cost += Number(u.cost_usd || 0);
 		}
+		return cost;
+	});
+
+	let totalTokens = $derived.by(() => {
+		let tokens = 0;
+		for (const u of usage) {
+			tokens += Number(u.tokens || 0);
+		}
+		return tokens;
+	});
+
+	let byFeature = $derived.by(() => {
+		let features: Record<string, { cost: number; count: number }> = {};
+		for (const u of usage) {
+			if (!features[u.feature]) features[u.feature] = { cost: 0, count: 0 };
+			features[u.feature].cost += Number(u.cost_usd || 0);
+			features[u.feature].count += 1;
+		}
+		return features;
 	});
 </script>
 

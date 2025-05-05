@@ -11,7 +11,9 @@ export async function GET({ locals, url }) {
         .from('ai_usage')
         .select('*')
         .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(100);
+
     if (error) return json({ error: error.message }, { status: 500 });
     return json({ usage: data });
 }
