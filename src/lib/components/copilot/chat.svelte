@@ -17,11 +17,13 @@
 		chat,
 		readonly,
 		initialMessages,
+		onSelectChat,
 	}: {
 		user?: any;
 		chat?: any;
 		initialMessages: UIMessage[];
 		readonly: boolean;
+		onSelectChat?: (chatId: string) => void;
 	} = $props();
 
 	console.log('[Chat] Initial props:', {
@@ -76,7 +78,7 @@
 
 <!-- //add rounded corners  -->
 <div class="flex h-dvh min-w-0 flex-col rounded-xl bg-background">
-	<ChatHeader {user} {chat} {readonly} />
+	<ChatHeader {user} {chat} {readonly} {onSelectChat} />
 	<Messages
 		{readonly}
 		loading={chatClient.status === 'streaming' ||

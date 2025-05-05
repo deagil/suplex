@@ -1,4 +1,11 @@
 {
 	"editor.formatOnSave": true,
-	"eslint.validate": ["javascript", "javascriptreact", "svelte"]
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"svelte"
+	],
+	"github.copilot.chat.agent.thinkingTool": true,
+	"github.copilot.chat.editor.temporalContext.enabled": true,
+	"github.copilot.chat.edits.temporalContext.enabled": true
 }

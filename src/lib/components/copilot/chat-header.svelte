@@ -8,10 +8,12 @@
 		user,
 		chat,
 		readonly,
+		onSelectChat,
 	}: {
 		user?: any;
 		chat?: any;
 		readonly: boolean;
+		onSelectChat?: (chatId: string) => void;
 	} = $props();
 	import {
 		DropdownMenu,
@@ -33,14 +35,14 @@
 	}
 
 	// Get the current chat title from chatHistory if available, fallback to chat.title
-	const currentChat = $derived(
+	const currentChat = $derived.by(
 		() => chatHistory?.getChatDetails(chat?.id) ?? chat,
 	);
-	const chatTitle = $derived(() => currentChat?.title ?? 'Chat');
+	const chatTitle = $derived.by(() => currentChat?.title ?? 'Chat');
 
 	function handleSelectChat(chatId: string) {
-		if (chatId !== chat?.id) {
-			goto(`/app/ai/${chatId}`); // Adjust route as needed
+		if (chatId !== chat?.id && typeof onSelectChat === 'function') {
+			onSelectChat(chatId);
 		}
 	}
 
@@ -109,7 +111,7 @@
 				{#each chatHistory.chats as prevChat (prevChat.id)}
 					{console.log('[ChatHeader] Dropdown item:', prevChat)}
 					<DropdownMenuItem
-						onSelect={() => handleSelectChat(prevChat.id)}
+						onclick={() => handleSelectChat(prevChat.id)}
 						class="flex items-center gap-2"
 						data-active={prevChat.id === chat?.id}
 					>
