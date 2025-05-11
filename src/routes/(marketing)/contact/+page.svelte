@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-	<title>Contact SaaS Kit</title>
+	<title>Contact Suplex</title>
 </svelte:head>
 
 <Card.Root class="mx-auto max-w-lg">

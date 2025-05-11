@@ -21,7 +21,7 @@
 				// Give the layout callback priority to update state or
 				// we'll just bounch back to login when /dashboard tries to load
 				setTimeout(() => {
-					goto('/dashboard');
+					goto('/activity');
 				}, 1);
 			}
 		});

@@ -4,61 +4,52 @@
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import { cn } from '$lib/utils';
 	import LucideChevronDown from 'virtual:icons/lucide/chevron-down';
-	import LineMdMoonLoop from '~icons/line-md/moon-loop';
-	import LucideCreditCard from '~icons/lucide/credit-card';
-	import LucideLayoutPanelTop from '~icons/lucide/layout-panel-top';
+	import BotMessageSquare from '~icons/lucide/bot-message-square';
+	import TableProperties from 'lucide-svelte/icons/table-properties';
 	import LucideLockKeyhole from '~icons/lucide/lock-keyhole';
-	import PaletteIcon from '~icons/lucide/palette';
-	import LucideSearchCheck from '~icons/lucide/search-check';
-	import TabletSmartphoneIcon from '~icons/lucide/tablet-smartphone';
+	import BookMarked from '~icons/lucide/book-marked';
 	import Themes from './showcases/Themes.svelte';
+	import DataViz from './showcases/dataviz/DataViz.svelte';
+	import { Book } from 'lucide-svelte';
+	import Dummychat from './showcases/copilot/dummychat.svelte';
+	// import { sheetPrompt } from '$lib/server/ai/prompts';
 	const features = [
+		// {
+		// 	icon: PaletteIcon,
+		// 	title: 'Themeable + Mode Switcher',
+		// 	description:
+		// 		"You can copy-paste any of the shadcn's premade themes, or create your own tweaking a few CSS variables. Any theme can be toggled between light and dark mode.",
+		// 	showcase: Themes,
+		// },
 		{
-			icon: PaletteIcon,
-			title: 'Themeable + Mode Switcher',
-			description:
-				"You can copy-paste any of the shadcn's premade themes, or create your own tweaking a few CSS variables. Any theme can be toggled between light and dark mode.",
-			showcase: Themes,
-		},
-		{
-			title: 'Responsive Design',
-			icon: TabletSmartphoneIcon,
+			title: 'Data Viewer',
+			icon: TableProperties,
 			description:
 				'Your app will designed to work on any device, from mobile to desktop. This includes the marketing site, the app itself, and any other pages.',
+			showcase: DataViz,
 		},
 		{
-			icon: LucideLayoutPanelTop,
-			title: 'Customizable Landing Page',
+			icon: BotMessageSquare,
+			title: 'A copilot but Air Traffic Control',
 			description:
-				"The landing page is fully customizable. You'll have access to many premade components inspired by the `shadcn-svelte` system to mix and match to your liking.",
+				'Bring your own LLM (or use ours) and query across all of your tools with centralised billing and usage insights. Chat to your data, and get answers in seconds. Give your workflows some reasoning power. Configure and equip your own AI agents to work for you.',
+			showcase: Dummychat,
 		},
 		{
-			icon: LineMdMoonLoop,
-			title: 'Unplugin Icons',
+			icon: BookMarked,
+			title: 'Never forget a function',
 			description:
-				'Icons are handled by the `unplugin-icons` Vite plugin. You can use any of the 1000+ icons from the 100+ icon sets available, and even add your own custom icons. There are also animated ones!',
-		},
-		{
-			icon: LucideSearchCheck,
-			title: 'SEO Friendly',
-			description:
-				'Your app will be optimized for search engines, with proper meta tags, sitemap, and other SEO best practices.',
+				'Documentation is automatically generated for youin the background, so you can focus on building',
 		},
 		{
 			icon: LucideLockKeyhole,
-			title: 'Auth',
+			title: `Security that isn't built on vibes.`,
 			description:
 				"The authentification system is already set up thanks to the Supabase Auth. There are login and register page as well as user settings page. You can also add social logins like Google, Facebook, and Github. We've also implemented advanced features like email verification, password reset, account deletion.",
 		},
-		{
-			icon: LucideCreditCard,
-			title: 'Payments',
-			description:
-				'The payments are handled by Stripe. You can create products and subscriptions. The user can manage their payment methods and subscriptions. The subscription downgrades and upgrades are also properly handled.',
-		},
 	];
 
-	const SHOW_BASE = 2;
+	const SHOW_BASE = 3;
 
 	let expanded: boolean = $state(false);
 </script>
@@ -70,9 +61,7 @@
 				class="mb-4 flex min-h-80 flex-nowrap items-start gap-4"
 			>
 				{@const SvelteComponent = icon}
-				<SvelteComponent
-					class="size-10 flex-shrink-0 fill-primary"
-				/>
+				<SvelteComponent class="size-10 flex-shrink-0 fill-primary" />
 				<div>
 					<Features.Term class="mb-3 leading-none">
 						<span>{title}</span>
@@ -98,20 +87,16 @@
 	</Features.Root>
 	<div class="flex items-center p-10">
 		<Collapsible.Trigger>
-			<Button
-				class="mx-auto place-self-center text-center"
-				variant="link"
-			>
-				>
-					Show {#if expanded}less{:else}more{/if} features
-					<LucideChevronDown
-						class={cn(
-							'ms-2 size-4 transition-transform',
-							expanded && '-rotate-180',
-						)}
-					/>
-				</Button>
-				</Collapsible.Trigger>
+			<Button class="mx-auto place-self-center text-center" variant="link">
+				Show {#if expanded}less{:else}more{/if} features
+				<LucideChevronDown
+					class={cn(
+						'ms-2 size-4 transition-transform',
+						expanded && '-rotate-180',
+					)}
+				/>
+			</Button>
+		</Collapsible.Trigger>
 	</div>
 	<Collapsible.Content>
 		<Features.Root>
@@ -119,9 +104,7 @@
 				<Features.FeatureItem>
 					{@const SvelteComponent_2 = icon}
 					<div class="mb-4 flex flex-nowrap items-start gap-4">
-						<SvelteComponent_2
-							class="h-8 w-8 flex-shrink-0 fill-primary"
-						/>
+						<SvelteComponent_2 class="h-8 w-8 flex-shrink-0 fill-primary" />
 						<Features.Term>{title}</Features.Term>
 					</div>
 					<Features.Description class="hyphens-auto text-justify">

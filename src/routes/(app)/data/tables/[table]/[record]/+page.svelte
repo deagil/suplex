@@ -88,7 +88,7 @@
 								size="icon"
 								onclick={() => {
 									navigator.clipboard.writeText(page.url.pathname);
-									toast.success('Copied link to current page');
+									toast.info('Copied link to current page.');
 								}}
 							>
 								<Link />

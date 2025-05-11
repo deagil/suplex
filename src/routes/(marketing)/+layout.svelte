@@ -47,11 +47,23 @@
 		</nav>
 		<div class="hidden justify-self-end sm:flex sm:gap-4">
 			{#if data.user}
-				<Button href="/dashboard">Dashboard</Button>
+				<Button href="/activity">Build</Button>
 			{:else}
-				<Button href="/login">Get Started Now</Button>
+				<Button
+					data-tally-open="nPg0Mb"
+					data-tally-layout="modal"
+					data-tally-hide-title="1"
+					data-tally-auto-close="3000"
+					data-tally-width="500"
+					href="https://github.com/kizivat/saas-kit"
+					target="_blank"
+					size="lg"
+					class="flex flex-nowrap gap-2"
+				>
+					Join Early Access
+				</Button>
 			{/if}
-			<PersonalMenu user={data.user} />
+			<!-- <PersonalMenu user={data.user} /> -->
 		</div>
 
 		<div class="justify-self-end sm:hidden">
@@ -150,11 +162,11 @@
 							{:else}
 								<li>
 									<Button
-										href="/dashboard"
+										href="/activity"
 										variant="ghost"
 										class="w-full py-6 text-base"
 									>
-										Dashboard
+										Build
 									</Button>
 								</li>
 								<li>
@@ -184,7 +196,7 @@
 	</div>
 </header>
 
-<main class="container mx-auto p-8">
+<main class=" m-0 w-full p-0">
 	{@render children?.()}
 </main>
 
@@ -278,23 +290,13 @@
 		</div>
 		<p class="max-w-prose place-self-center text-center text-sm leading-6">
 			&copy; {new Date().getFullYear()}
-			{WebsiteName} created by <Button
+			{WebsiteName} vibed by <Button
 				variant="link"
 				href="https://kizivat.eu"
 				target="_blank"
 				class="h-auto p-0 text-primary underline hover:no-underline"
-				>David Kizivat</Button
-			>. Based on <Button
-				variant="link"
-				class="h-auto p-0 text-primary underline hover:no-underline"
-				href="https://github.com/CriticalMoments/CMSaasStarter"
-				target="_blank">CriticalMoments/CMSaasStarter</Button
-			>. Landing page design inspired by Leo Miranda's <Button
-				variant="link"
-				class="h-auto p-0 text-primary underline hover:no-underline"
-				href="https://shadcn-landing-page.vercel.app/"
-				target="_blank">Shadcn Landing Page</Button
-			>.
+				>Dylan Gilchrist</Button
+			>
 		</p>
 	</div>
 </footer>

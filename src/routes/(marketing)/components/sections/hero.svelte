@@ -3,51 +3,71 @@
 	import { cn } from '$lib/utils';
 	import GitHubIcon from 'virtual:icons/lucide/github';
 	import HeroAnimation from '../HeroAnimation.svelte';
+	import TallyLogo from './tally-logo.svelte';
 </script>
 
-<div class="grid items-center gap-10 overflow-visible md:grid-cols-2">
-	<div class="flex flex-col items-center gap-4 sm:gap-6 md:items-start">
+<section
+	class="hero relative z-0 h-screen w-full overflow-hidden bg-black pt-20"
+>
+	<!-- The hero image, always 100% height, auto width, centered -->
+	<img
+		src="/images/marketing/hero_image.png"
+		alt="Hero"
+		class="absolute inset-y-0 right-0 h-full object-cover"
+		style="
+			-webkit-mask-image: linear-gradient(to right, transparent, black 20%, black);
+			mask-image: linear-gradient(to right, transparent, black 20%, black);
+			z-index: 1;
+		"
+		draggable="false"
+	/>
+
+	<!-- Content goes here, above the image -->
+	<div
+		class="absolute left-0 top-[56%] z-20 flex flex-col px-4 text-white md:px-16"
+		style="transform: translateY(-50%);"
+	>
 		<h1
 			class={cn(
-				'inline',
-				'text-xl font-bold md:text-3xl',
-				'bg-gradient-to-r from-primary/20 via-primary to-primary/20 bg-clip-text text-transparent',
+				'font-retro tracking-t text-shadow-xl bg-clip-text text-4xl tracking-tight md:text-8xl',
 			)}
 		>
-			SaaS Kit Demo
+			Stop fighting your tools.
 		</h1>
-
-		<p
+		<h1
 			class={cn(
-				'text-center md:text-left',
-				'px-2 text-4xl font-bold leading-[1.2] md:text-6xl',
-				'[&_em]:not-italic [&_em]:underline [&_em]:decoration-primary [&_em]:decoration-4 [&_em]:md:decoration-[6px]',
+				'font-retro tracking-t text-shadow-xl bg-clip-text text-4xl tracking-tight md:text-8xl',
 			)}
 		>
-			Launch Your SaaS with an
-			<em>open-source</em> Template
+			Suplex them.
+		</h1>
+		<p class="mt-4 md:text-xl lg:text-2xl xl:text-3xl [&_a]:underline">
+			Suplex is a platform for managing and querying data across your tools
 		</p>
-		<p class="text-center md:text-left md:text-lg [&_a]:underline">
-			Kickstart your SaaS with a powerful, open-source starter kit. Built using
-			<a href="https://kit.svelte.dev" target="_blank">SvelteKit</a>,
-			<a href="https://supabase.io" target="_blank">Supabase</a>, and
-			<a href="https://shadcn-svelte.com" target="_blank">shadcn-svelte</a>,
-			with seamless <a href="https://stripe.com" target="_blank">Stripe</a> integration.
-			Scale effortlessly to up to 50,000 users completely free.
+		<p class="md:text-xl lg:text-2xl xl:text-3xl [&_a]:underline">
+			— with documentation, logging and AI built in.
 		</p>
-		<div class="mt-6 flex flex-wrap justify-center gap-3 md:mt-2">
-			<Button href="/login">Get Started Now</Button>
+		<div class="mt-6 flex flex-col items-start space-y-4">
+			<!-- <Button href="/login" size="lg">Join the waitlist</Button> -->
 			<Button
+				data-tally-open="nPg0Mb"
+				data-tally-layout="modal"
+				data-tally-hide-title="1"
+				data-tally-auto-close="3000"
+				data-tally-width="500"
 				variant="secondary"
 				href="https://github.com/kizivat/saas-kit"
 				target="_blank"
-				class="flex flex-nowrap gap-2"
+				size="lg"
+				class="flex flex-nowrap gap-2 bg-white text-black hover:bg-white/80"
 			>
-				<GitHubIcon class="h-4 w-4" />
-				Explore on GitHub
+				<TallyLogo class="h-4 w-4" />
+				Join Early Access
 			</Button>
 		</div>
 	</div>
 
 	<HeroAnimation />
-</div>
+</section>
+
+<HeroAnimation />
