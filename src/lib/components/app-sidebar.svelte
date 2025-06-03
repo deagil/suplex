@@ -72,15 +72,19 @@
 				items: [
 					{
 						title: 'Agents',
-						url: '#',
+						url: '/ai/agents',
 					},
 					{
 						title: 'Models',
-						url: '#',
+						url: '/ai/models',
 					},
 					{
 						title: 'Usage',
-						url: '#',
+						url: '/ai/usage',
+					},
+					{
+						title: 'MCP Servers',
+						url: '/ai/mcp',
 					},
 				],
 			},

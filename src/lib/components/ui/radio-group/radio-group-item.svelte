@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils.js';
 	import { RadioGroup as RadioGroupPrimitive } from 'bits-ui';
-	import Circle from 'virtual:icons/lucide/circle';
 
 	type $$Props = RadioGroupPrimitive.ItemProps;
 	type $$Events = RadioGroupPrimitive.ItemEvents;
@@ -9,11 +8,10 @@
 	interface Props {
 		class?: $$Props['class'];
 		value: $$Props['value'];
-		[key: string]: any
+		[key: string]: unknown;
 	}
 
 	let { class: className = undefined, value, ...rest }: Props = $props();
-	
 </script>
 
 <RadioGroupPrimitive.Item
@@ -23,11 +21,5 @@
 		className,
 	)}
 	{...rest}
-	on:click
->
-	<div class="flex items-center justify-center">
-		<RadioGroupPrimitive.ItemIndicator>
-			<Circle class="h-2.5 w-2.5 fill-current text-current" />
-		</RadioGroupPrimitive.ItemIndicator>
-	</div>
-</RadioGroupPrimitive.Item>
+	onclick
+/>
