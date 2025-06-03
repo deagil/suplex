@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SparklesIcon from '$lib/components/icons/sparkles.svelte';
-	import { Check, MessageCircleWarning } from 'lucide-svelte';
+	import { Check, MessageCircleWarning } from '@lucide/svelte/icons';
 	import { fade } from 'svelte/transition';
 
 	export let phase: 'thinking' | 'finishing' = 'thinking';

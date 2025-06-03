@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 	import { Button } from '../ui/button';
-	import { RefreshCcw } from 'lucide-svelte';
+	import RefreshCcw from '@lucide/svelte/icons/refresh-ccw';
 	import { goto } from '$app/navigation';
 	// Removed Drizzle-specific types; using generic types instead.
 	let {

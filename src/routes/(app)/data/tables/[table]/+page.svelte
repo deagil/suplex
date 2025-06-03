@@ -10,7 +10,7 @@
 		FilePlus2,
 		TextSearch,
 		PencilLine,
-	} from 'lucide-svelte';
+	} from '@lucide/svelte/icons';
 	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
 

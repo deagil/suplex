@@ -2,7 +2,7 @@
 	import { tick } from 'svelte';
 	let messages: { role: 'user' | 'assistant'; content: string }[] = [];
 	let input = '';
-	import { SparklesIcon } from 'lucide-svelte';
+	import SparklesIcon from '@lucide/svelte/icons/sparkles';
 
 	const commonReplies = [
 		'I completely understand your question.',

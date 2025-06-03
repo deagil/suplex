@@ -8,7 +8,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import RecordCard from './RecordCard.svelte';
 	import AuditTimeline from './AuditTimeline.svelte';
-	import { Link } from 'lucide-svelte';
+	import Link from '@lucide/svelte/icons/link';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { page } from '$app/state';
 	import { toast } from 'svelte-sonner';

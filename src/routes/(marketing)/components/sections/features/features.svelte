@@ -5,12 +5,12 @@
 	import { cn } from '$lib/utils';
 	import LucideChevronDown from 'virtual:icons/lucide/chevron-down';
 	import BotMessageSquare from '~icons/lucide/bot-message-square';
-	import TableProperties from 'lucide-svelte/icons/table-properties';
+	import TableProperties from '@lucide/svelte/icons/table-properties';
 	import LucideLockKeyhole from '~icons/lucide/lock-keyhole';
 	import BookMarked from '~icons/lucide/book-marked';
 	import Themes from './showcases/Themes.svelte';
 	import DataViz from './showcases/dataviz/DataViz.svelte';
-	import { Book } from 'lucide-svelte';
+	import Book from '@lucide/svelte/icons/book';
 	import Dummychat from './showcases/copilot/dummychat.svelte';
 	// import { sheetPrompt } from '$lib/server/ai/prompts';
 	const features = [
