@@ -7,6 +7,10 @@
 	import Chat from '$lib/components/copilot/chat.svelte';
 	import { ChatHistory } from '$lib/hooks/chat-history.svelte';
 	import { onMount } from 'svelte';
+	import * as NavigationMenu from '$lib/components/ui/navigation-menu/index.js';
+	import { cn } from '$lib/utils.js';
+	import type { HTMLAttributes } from 'svelte/elements';
+
 	let { data, children } = $props();
 
 	const chatHistory = new ChatHistory(Promise.resolve(data.chats));
@@ -33,10 +37,82 @@
 		}
 	}
 
+	const components: { title: string; href: string; description: string }[] = [
+		{
+			title: 'Alert Dialog',
+			href: '/docs/primitives/alert-dialog',
+			description:
+				'A modal dialog that interrupts the user with important content and expects a response.',
+		},
+		{
+			title: 'Hover Card',
+			href: '/docs/primitives/hover-card',
+			description:
+				'For sighted users to preview content available behind a link.',
+		},
+		{
+			title: 'Progress',
+			href: '/docs/primitives/progress',
+			description:
+				'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
+		},
+		{
+			title: 'Scroll-area',
+			href: '/docs/primitives/scroll-area',
+			description: 'Visually or semantically separates content.',
+		},
+		{
+			title: 'Tabs',
+			href: '/docs/primitives/tabs',
+			description:
+				'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
+		},
+		{
+			title: 'Tooltip',
+			href: '/docs/primitives/tooltip',
+			description:
+				'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+		},
+	];
+
+	type ListItemProps = HTMLAttributes<HTMLAnchorElement> & {
+		title: string;
+		href: string;
+		content: string;
+	};
+
 	onMount(() => {
 		if (selectedChat) fetchMessages(selectedChat.id);
 	});
 </script>
+
+{#snippet ListItem({
+	title,
+	content,
+	href,
+	class: className,
+	...restProps
+}: ListItemProps)}
+	<li>
+		<NavigationMenu.Link>
+			{#snippet child()}
+				<a
+					{href}
+					class={cn(
+						'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+						className,
+					)}
+					{...restProps}
+				>
+					<div class="text-sm font-medium leading-none">{title}</div>
+					<p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+						{content}
+					</p>
+				</a>
+			{/snippet}
+		</NavigationMenu.Link>
+	</li>
+{/snippet}
 
 <Toaster richColors position="top-center" />
 <Sidebar.Provider>

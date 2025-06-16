@@ -12,7 +12,6 @@
 	import MessagesSquare from '@lucide/svelte/icons/messages-square';
 	import Database from '@lucide/svelte/icons/database';
 	import FolderOpen from '@lucide/svelte/icons/folder-open';
-
 	const data = {
 		user: {
 			name: 'shadcn',
@@ -184,6 +183,7 @@
 			},
 		],
 	};
+
 	import { onMount } from 'svelte';
 	import NavMain from '$lib/components/nav-main.svelte';
 	import NavProjects from '$lib/components/nav-projects.svelte';

@@ -4,12 +4,13 @@
 	import Chat from '$lib/components/copilot/chat.svelte';
 	import { onMount } from 'svelte';
 
-	const chatHistory = new ChatHistory(Promise.resolve(data.chats));
-	chatHistory.setContext();
+	let { data } = $props();
 
 	let selectedChat = $state(null);
 	let messages = $state([]);
-	let { data } = $props();
+
+	const chatHistory = new ChatHistory(Promise.resolve(data.chats));
+	chatHistory.setContext();
 
 	async function fetchMessages(chatId: string) {
 		const res = await fetch(`/api/chat/messages/${chatId}`);
